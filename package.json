@@ -1,13 +1,13 @@
 {
-  "name": "@grappafinance/grappa-contracts",
+  "name": "@grappafinance/full-collat-margin",
   "author": "antoncoding",
-  "version": "1.1.1",
-  "description": "option protocol built with forge template",
-  "homepage": "https://github.com/grappafinance/core",
+  "version": "1.0.0",
+  "description": "full collat margin engine for Grappa",
+  "homepage": "https://github.com/grappafinance/full-collat-engine",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git@github.com:grappafinance/core.git"
+    "url": "git@github.com:grappafinance/full-collat-engine.git"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.0.0",
