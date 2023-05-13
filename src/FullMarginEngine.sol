@@ -23,10 +23,8 @@ import "grappa-core/config/enums.sol";
 import "grappa-core/config/constants.sol";
 import "grappa-core/config/errors.sol";
 
-
 import {FullMarginMath} from "./FullMarginMath.sol";
 import {FullMarginLib} from "./FullMarginLib.sol";
-
 
 // Full margin types
 import "./types.sol";
