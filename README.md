@@ -1,5 +1,5 @@
 <div align="center">
-  <h1 > Grappa Core</h1>
+  <h1 > Grappa Fully Collat Engine </h1>
   
   <img height=60 src="https://i.imgur.com/vSIO8xJ.png"/>
   <br/>
@@ -8,9 +8,6 @@
   <a href=https://github.com/antoncoding/grappa/actions/workflows/Slither.yml""><img src="https://github.com/antoncoding/grappa/actions/workflows/Slither.yml/badge.svg?branch=master" > </a>
   <a href=https://github.com/grappafinance/core/actions/workflows/CI.yml""><img src="https://github.com/grappafinance/core/actions/workflows/CI.yml/badge.svg?branch=master"> </a>
 
-  <!-- reopen coverage badge again after foundry official launch coverage -->
-  <a href="https://codecov.io/gh/grappafinance/core" >
-<img src="https://codecov.io/gh/grappafinance/core/branch/master/graph/badge.svg?token=G52EOD1X5B"/>
 </a>
   <h5 align="center"> Don't waste your capital.</h5>
   
@@ -62,57 +59,4 @@ forge coverage
 
 ```shell
 forge fmt
-```
-
-
-### Deployment
-
-Simulate deployment for launch
-
-```shell
-forge script script/deploy-launch.sol --private-key <your PK> --fork-url <RPC-endpoint> 
-```
-## Run Slither
-
-installation
-
-```shell
-pip3 install slither-analyzer
-pip3 install solc-select
-solc-select install 0.8.13
-solc-select use 0.8.13
-```
-
-Run analysis
-
-```shell
-slither ./src/core/
-```
-
-
-## Install Grappa into your project
-
-With hardhat
-
-```shell
-yarn add @grappafinance/grappa-contracts
-
-# or
-
-npm install @grappafinance/grappa-contracts
-```
-
-With Foundry
-
-```shell
-forge install grappafinance/core
-```
-
-Then you will be able to import the libraries or contract interface
-
-```solidity
-pragma solidity ^0.8.0;
-
-import "@grappafinance/grappa-contracts/src/libraries/ActionUtil.sol";
-
 ```

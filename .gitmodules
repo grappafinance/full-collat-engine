@@ -17,3 +17,6 @@
 	path = lib/array-lib
 	url = https://github.com/grappafinance/array-lib
 	branch = v0.2.0
+[submodule "lib/core"]
+	path = lib/core
+	url = https://github.com/grappafinance/core
