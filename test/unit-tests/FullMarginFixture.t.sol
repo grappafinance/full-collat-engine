@@ -2,10 +2,9 @@
 pragma solidity ^0.8.0;
 
 import "forge-std/Test.sol";
-import "../mocks/MockERC20.sol";
-import "../mocks/MockOracle.sol";
 
-import "grappa-core/core/engines/full-margin/FullMarginEngine.sol";
+// Grappa contract & OptionToken
+
 import "grappa-core/core/Grappa.sol";
 import "grappa-core/core/GrappaProxy.sol";
 import "grappa-core/core/OptionToken.sol";
@@ -13,9 +12,14 @@ import "grappa-core/core/OptionToken.sol";
 import "grappa-core/config/enums.sol";
 import "grappa-core/config/types.sol";
 
+import "grappa-core/test/shared/ActionHelper.sol";
+
+import "src/FullMarginEngine.sol";
 import "../utils/Utilities.sol";
 
-import {ActionHelper} from "grappa-core/test/shared/ActionHelper.sol";
+// Mocks
+import "../mocks/MockERC20.sol";
+import "../mocks/MockOracle.sol";
 
 // solhint-disable max-states-count
 
