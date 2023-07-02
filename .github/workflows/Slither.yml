@@ -1,4 +1,4 @@
-name: Slither Analysis (Bypassed)
+name: Slither Analysis
 
 # temporarily disabled because of the action bug
 on:
