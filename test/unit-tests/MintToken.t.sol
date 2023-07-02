@@ -9,8 +9,6 @@ import "grappa-core/config/types.sol";
 import "grappa-core/config/constants.sol";
 import "grappa-core/config/errors.sol";
 
-import "../mocks/MockERC20.sol";
-
 import "src/errors.sol";
 
 // solhint-disable-next-line contract-name-camelcase

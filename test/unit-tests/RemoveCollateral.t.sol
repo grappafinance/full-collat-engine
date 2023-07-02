@@ -40,8 +40,8 @@ contract TestRemoveCollateral_FM is FullMarginFixture {
     }
 
     function testRemoveCollateralMoveBalance() public {
-        uint256 engineBalanceBefoe = usdc.balanceOf(address(engine));
-        uint256 myBalanceBefoe = usdc.balanceOf(address(this));
+        uint256 engineBalanceBefore = usdc.balanceOf(address(engine));
+        uint256 myBalanceBefore = usdc.balanceOf(address(this));
 
         ActionArgs[] memory actions = new ActionArgs[](1);
         actions[0] = createRemoveCollateralAction(depositAmount, usdcId, address(this));
@@ -50,8 +50,8 @@ contract TestRemoveCollateral_FM is FullMarginFixture {
         uint256 engineBalanceAfter = usdc.balanceOf(address(engine));
         uint256 myBalanceAfter = usdc.balanceOf(address(this));
 
-        assertEq(myBalanceAfter - myBalanceBefoe, depositAmount);
-        assertEq(engineBalanceBefoe - engineBalanceAfter, depositAmount);
+        assertEq(myBalanceAfter - myBalanceBefore, depositAmount);
+        assertEq(engineBalanceBefore - engineBalanceAfter, depositAmount);
     }
 
     function testCannotRemoveDifferentCollateral() public {

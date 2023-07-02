@@ -35,8 +35,8 @@ contract TestAddCollateral_FM is FullMarginFixture {
     }
 
     function testAddCollateralMoveBalance() public {
-        uint256 engineBalanceBefoe = usdc.balanceOf(address(engine));
-        uint256 myBalanceBefoe = usdc.balanceOf(address(this));
+        uint256 engineBalanceBefore = usdc.balanceOf(address(engine));
+        uint256 myBalanceBefore = usdc.balanceOf(address(this));
         uint256 depositAmount = 1000 * 1e6;
 
         ActionArgs[] memory actions = new ActionArgs[](1);
@@ -46,13 +46,13 @@ contract TestAddCollateral_FM is FullMarginFixture {
         uint256 engineBalanceAfter = usdc.balanceOf(address(engine));
         uint256 myBalanceAfter = usdc.balanceOf(address(this));
 
-        assertEq(myBalanceBefoe - myBalanceAfter, depositAmount);
-        assertEq(engineBalanceAfter - engineBalanceBefoe, depositAmount);
+        assertEq(myBalanceBefore - myBalanceAfter, depositAmount);
+        assertEq(engineBalanceAfter - engineBalanceBefore, depositAmount);
     }
 
     function testAddCollateralLoopMoveBalances() public {
-        uint256 engineBalanceBefoe = usdc.balanceOf(address(engine));
-        uint256 myBalanceBefoe = usdc.balanceOf(address(this));
+        uint256 engineBalanceBefore = usdc.balanceOf(address(engine));
+        uint256 myBalanceBefore = usdc.balanceOf(address(this));
         uint256 depositAmount = 500 * 1e6;
 
         ActionArgs[] memory actions = new ActionArgs[](2);
@@ -63,8 +63,8 @@ contract TestAddCollateral_FM is FullMarginFixture {
         uint256 engineBalanceAfter = usdc.balanceOf(address(engine));
         uint256 myBalanceAfter = usdc.balanceOf(address(this));
 
-        assertEq(myBalanceBefoe - myBalanceAfter, depositAmount * 2);
-        assertEq(engineBalanceAfter - engineBalanceBefoe, depositAmount * 2);
+        assertEq(myBalanceBefore - myBalanceAfter, depositAmount * 2);
+        assertEq(engineBalanceAfter - engineBalanceBefore, depositAmount * 2);
     }
 
     function testCannotAddDifferentProductToSameAccount() public {

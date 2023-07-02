@@ -5,6 +5,9 @@ pragma solidity ^0.8.0;
  *    Full Margin Errors
  * -----------------------  */
 
+/// @dev full margin doesn't support this token type
+error FM_UnsupportedTokenType();
+
 /// @dev full margin doesn't support this action
 error FM_UnsupportedAction();
 

@@ -20,6 +20,32 @@ contract FullMarginMathTester {
     }
 }
 
+contract FullMarginMathBasic is Test {
+    using FullMarginMath for FullMarginDetail;
+
+    FullMarginMathTester tester;
+
+    function setUp() public {
+        tester = new FullMarginMathTester();
+    }
+
+    function testNoCollateralIfNoShort() public {
+        FullMarginDetail memory detail = FullMarginDetail({
+            shortAmount: 0,
+            longStrike: 0,
+            shortStrike: 0,
+            collateralAmount: 0,
+            collateralDecimals: 6,
+            collateralizedWithStrike: false,
+            tokenType: TokenType.CALL
+        });
+
+        uint256 collat = tester.getMinCollateral(detail);
+        uint256 expectedRequirement = 0;
+        assertEq(collat, expectedRequirement);
+    }
+}
+
 /**
  * test full margin calculation for simple call
  */
@@ -32,7 +58,7 @@ contract FullMarginMathTestCall is Test {
         tester = new FullMarginMathTester();
     }
 
-    function testMarginRequireCall() public {
+    function testMarginRequirementCall() public {
         FullMarginDetail memory detail = FullMarginDetail({
             shortAmount: UNIT,
             longStrike: 0,
@@ -48,7 +74,7 @@ contract FullMarginMathTestCall is Test {
         assertEq(collat, expectedRequirement);
     }
 
-    function testMarginRequireMultipleCall() public {
+    function testMarginRequirementMultipleCall() public {
         uint256 shortAmount = 5 * UNIT;
         FullMarginDetail memory detail = FullMarginDetail({
             shortAmount: shortAmount,
@@ -66,7 +92,7 @@ contract FullMarginMathTestCall is Test {
         assertEq(collat, expectedRequirement);
     }
 
-    function testMarginRequireMultipleCallDiffDecimals() public {
+    function testMarginRequirementMultipleCallDiffDecimals() public {
         uint256 shortAmount = 5 * UNIT;
         FullMarginDetail memory detail = FullMarginDetail({
             shortAmount: shortAmount,
@@ -97,7 +123,7 @@ contract FullMarginMathTestCallSpreadWithUnderlying is Test {
         tester = new FullMarginMathTester();
     }
 
-    function testMarginRequireCallCreditSpread() public {
+    function testMarginRequirementCallCreditSpread() public {
         FullMarginDetail memory detail = FullMarginDetail({
             shortAmount: UNIT,
             longStrike: 4000 * UNIT,
@@ -113,7 +139,7 @@ contract FullMarginMathTestCallSpreadWithUnderlying is Test {
         assertEq(collat, expectedRequirement);
     }
 
-    function testMarginRequireMultipleCallCreditSpread() public {
+    function testMarginRequirementMultipleCallCreditSpread() public {
         uint256 shortAmount = 5 * UNIT;
         FullMarginDetail memory detail = FullMarginDetail({
             shortAmount: shortAmount,
@@ -131,7 +157,7 @@ contract FullMarginMathTestCallSpreadWithUnderlying is Test {
         assertEq(collat, expectedRequirement);
     }
 
-    function testMarginRequireMultipleCallCreditSpreadDiffDecimals() public {
+    function testMarginRequirementMultipleCallCreditSpreadDiffDecimals() public {
         uint256 shortAmount = 5 * UNIT;
         FullMarginDetail memory detail = FullMarginDetail({
             shortAmount: shortAmount,
@@ -149,7 +175,7 @@ contract FullMarginMathTestCallSpreadWithUnderlying is Test {
         assertEq(collat, expectedRequirement);
     }
 
-    function testMarginRequireCallDebitSpread() public {
+    function testMarginRequirementCallDebitSpread() public {
         FullMarginDetail memory detail = FullMarginDetail({
             shortAmount: UNIT,
             longStrike: 2000 * UNIT,
@@ -178,7 +204,7 @@ contract FullMarginMathTestCallSpreadWithStrike is Test {
         tester = new FullMarginMathTester();
     }
 
-    function testMarginRequireCallCreditSpread() public {
+    function testMarginRequirementCallCreditSpread() public {
         FullMarginDetail memory detail = FullMarginDetail({
             shortAmount: UNIT,
             longStrike: 4000 * UNIT,
@@ -194,7 +220,7 @@ contract FullMarginMathTestCallSpreadWithStrike is Test {
         assertEq(collat, expectedRequirement);
     }
 
-    function testMarginRequireMultipleCallCreditSpread() public {
+    function testMarginRequirementMultipleCallCreditSpread() public {
         uint256 shortAmount = 5 * UNIT;
         FullMarginDetail memory detail = FullMarginDetail({
             shortAmount: shortAmount,
@@ -212,7 +238,7 @@ contract FullMarginMathTestCallSpreadWithStrike is Test {
         assertEq(collat, expectedRequirement);
     }
 
-    function testMarginRequireMultipleCallCreditSpreadDiffDecimals() public {
+    function testMarginRequirementMultipleCallCreditSpreadDiffDecimals() public {
         uint256 shortAmount = 5 * UNIT;
         FullMarginDetail memory detail = FullMarginDetail({
             shortAmount: shortAmount,
@@ -230,7 +256,7 @@ contract FullMarginMathTestCallSpreadWithStrike is Test {
         assertEq(collat, expectedRequirement);
     }
 
-    function testMarginRequireCallDebitSpread() public {
+    function testMarginRequirementCallDebitSpread() public {
         FullMarginDetail memory detail = FullMarginDetail({
             shortAmount: UNIT,
             longStrike: 2000 * UNIT,
@@ -259,7 +285,7 @@ contract FullMarginMathTestPut is Test {
         tester = new FullMarginMathTester();
     }
 
-    function testMarginRequirePut() public {
+    function testMarginRequirementPut() public {
         FullMarginDetail memory detail = FullMarginDetail({
             shortAmount: UNIT,
             longStrike: 0,
@@ -275,7 +301,7 @@ contract FullMarginMathTestPut is Test {
         assertEq(collat, expectedRequirement);
     }
 
-    function testMarginRequireMultiplePut() public {
+    function testMarginRequirementMultiplePut() public {
         uint256 shortAmount = 5 * UNIT;
         FullMarginDetail memory detail = FullMarginDetail({
             shortAmount: shortAmount,
@@ -293,7 +319,7 @@ contract FullMarginMathTestPut is Test {
         assertEq(collat, expectedRequirement);
     }
 
-    function testMarginRequireMultiplePutDiffDecimals() public {
+    function testMarginRequirementMultiplePutDiffDecimals() public {
         uint256 shortAmount = 5 * UNIT;
         FullMarginDetail memory detail = FullMarginDetail({
             shortAmount: shortAmount,
@@ -324,7 +350,7 @@ contract FullMarginMathTestPutSpread is Test {
         tester = new FullMarginMathTester();
     }
 
-    function testMarginRequirePutCreditSpread() public {
+    function testMarginRequirementPutCreditSpread() public {
         FullMarginDetail memory detail = FullMarginDetail({
             shortAmount: UNIT,
             longStrike: 2000 * UNIT,
@@ -340,7 +366,7 @@ contract FullMarginMathTestPutSpread is Test {
         assertEq(collat, expectedRequirement);
     }
 
-    function testMarginRequireMultipleCallCreditSpread() public {
+    function testMarginRequirementMultipleCallCreditSpread() public {
         uint256 shortAmount = 5 * UNIT;
         FullMarginDetail memory detail = FullMarginDetail({
             shortAmount: shortAmount,
@@ -358,7 +384,7 @@ contract FullMarginMathTestPutSpread is Test {
         assertEq(collat, expectedRequirement);
     }
 
-    function testMarginRequireMultipleCallCreditSpreadDiffDecimals() public {
+    function testMarginRequirementMultipleCallCreditSpreadDiffDecimals() public {
         uint256 shortAmount = 5 * UNIT;
         FullMarginDetail memory detail = FullMarginDetail({
             shortAmount: shortAmount,
@@ -376,7 +402,7 @@ contract FullMarginMathTestPutSpread is Test {
         assertEq(collat, expectedRequirement);
     }
 
-    function testMarginRequireCallDebitSpread() public {
+    function testMarginRequirementCallDebitSpread() public {
         FullMarginDetail memory detail = FullMarginDetail({
             shortAmount: UNIT,
             longStrike: 4000 * UNIT,
