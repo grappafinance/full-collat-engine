@@ -3,7 +3,6 @@ pragma solidity ^0.8.0;
 
 // import test base and helpers.
 import {FullMarginFixture} from "./FullMarginFixture.t.sol";
-import "../mocks/MockERC20.sol";
 
 import "grappa-core/config/enums.sol";
 import "grappa-core/config/types.sol";

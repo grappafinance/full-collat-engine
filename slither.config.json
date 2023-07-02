@@ -1,10 +1,11 @@
 {
   "detectors_to_exclude": "timestamp,naming-convention,pragma,solc-version,uninitialized-local",
-  "filter_paths": "lib",
+  "filter_paths": "lib|test",
   "solc_remaps": [
-    "openzeppelin/=lib/openzeppelin-contracts/contracts/",
-    "forge-std/=lib/forge-std/src/",
     "solmate/=lib/solmate/src/",
-    "array-lib=lib/array-lib/src"
+    "forge-std/=lib/forge-std/src/",
+    "openzeppelin/=lib/openzeppelin-contracts/contracts/",
+    "grappa-core/=lib/core-cash/src/",
+    "grappa-core-test/=lib/core-cash/test/"
   ]
 }

@@ -77,7 +77,7 @@ library FullMarginMath {
                 }
             }
         } else {
-            revert("No Type");
+            revert FM_UnsupportedTokenType();
         }
 
         return NumberUtil.convertDecimals(unitAmount, UNIT_DECIMALS, _account.collateralDecimals);
