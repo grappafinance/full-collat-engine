@@ -18,21 +18,21 @@ jobs:
         with:
           version: nightly
 
-      # - name: Install dependencies
-      #   run: forge install
+      - name: Install dependencies
+        run: forge install
         
-      # - name: Run Slither core
-      #   uses: crytic/slither-action@v0.2.0
-      #   continue-on-error: true
-      #   id: slither
-      #   with:
-      #     target: "src/"
-      #     slither-config: "slither.config.json"
-      #     solc-version: 0.8.17
-      #     sarif: results.sarif
-      #     fail-on: none
+      - name: Run Slither core
+        uses: crytic/slither-action@v0.2.0
+        continue-on-error: true
+        id: slither
+        with:
+          target: "src/"
+          slither-config: "slither.config.json"
+          solc-version: 0.8.19
+          sarif: results.sarif
+          fail-on: none
 
-      # - name: Upload SARIF file for core
-      #   uses: github/codeql-action/upload-sarif@v2
-      #   with:
-      #     sarif_file: ${{ steps.slither.outputs.sarif }}
+      - name: Upload SARIF file for core
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: ${{ steps.slither.outputs.sarif }}
