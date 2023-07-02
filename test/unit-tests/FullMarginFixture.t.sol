@@ -7,12 +7,12 @@ import "forge-std/Test.sol";
 
 import "grappa-core/core/Grappa.sol";
 import "grappa-core/core/GrappaProxy.sol";
-import "grappa-core/core/OptionToken.sol";
+import "grappa-core/core/CashOptionToken.sol";
 
 import "grappa-core/config/enums.sol";
 import "grappa-core/config/types.sol";
 
-import "grappa-core/test/shared/ActionHelper.sol";
+import "grappa-core-test/shared/ActionHelper.sol";
 
 import "src/FullMarginEngine.sol";
 import "../utils/Utilities.sol";
@@ -29,7 +29,7 @@ import "../mocks/MockOracle.sol";
 contract FullMarginFixture is Test, ActionHelper, Utilities {
     FullMarginEngine internal engine;
     Grappa internal grappa;
-    OptionToken internal option;
+    CashOptionToken internal option;
 
     MockERC20 internal usdc;
     MockERC20 internal weth;
@@ -62,12 +62,12 @@ contract FullMarginFixture is Test, ActionHelper, Utilities {
         // predict address of margin account and use it here
         address grappaAddr = predictAddress(address(this), 6);
 
-        option = new OptionToken(grappaAddr, address(0)); // nonce: 4
+        option = new CashOptionToken(grappaAddr, address(0)); // nonce: 4
 
         // predict address of margin account and use it here
         address grappaImplementation = address(new Grappa(address(option))); // nonce: 5
 
-        bytes memory data = abi.encode(Grappa.initialize.selector);
+        bytes memory data = abi.encodeWithSelector(Grappa.initialize.selector, address(this));
 
         grappa = Grappa(address(new GrappaProxy(grappaImplementation, data))); // 6
 
