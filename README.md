@@ -18,16 +18,12 @@
 
 ## Introduction
 
-This is the repository of the core component of Grappa, which is a decentralized settlement layer for options and spreads.
+This is the repository contains the full collateral margin engine for Grappa core protocol. This module is capable of minting the following tokens:
 
-In our design, a option (derivative) token can be created by different **margin engine**. Users with different risk tolerance can choose among different engines based on gas cost, capital efficiency and risk of liquidation.
-
-We also natively support call spread and put spread that can increase capital efficiency by a lot while being fully collateralized.
-
-
-## Documentation
-
-For detailed documentation about how the system architecture is designed, please visit [docs](./docs/)
+* Call option (collateralized with underlying asset)
+* Put option (collateralized with strike asset)
+* Call spread (collateralized with underlying or strike)
+* Put spread (collateralized with strike)
 
 ## Get Started
 
