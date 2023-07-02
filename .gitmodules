@@ -7,6 +7,7 @@
 [submodule "lib/openzeppelin-contracts"]
 	path = lib/openzeppelin-contracts
 	url = https://github.com/OpenZeppelin/openzeppelin-contracts
+	branch = v4.8.2
 [submodule "lib/array-lib"]
 	path = lib/array-lib
 	url = https://github.com/grappafinance/array-lib
