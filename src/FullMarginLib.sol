@@ -14,8 +14,7 @@ import "./errors.sol";
  * @title FullMarginLib
  * @dev   This library is in charge of updating the full account struct.
  *        whether a "token id" is valid or not is checked in Grappa.sol.
- *
- *        FullMarginLib only supports 1 collat type and 1 short position
+ *        FullMarginLib only supports 1 collat type and 1 short position (could combined with 1 long)
  */
 library FullMarginLib {
     using TokenIdUtil for uint256;
@@ -114,7 +113,7 @@ library FullMarginLib {
      * @dev shortId and longId already have the same optionType, productId, expiry
      * @param account FullMarginAccount storage that will be updated
      * @param shortId existing short position to be converted into spread
-     * @param longId token to be "added" into the account. This is expected to have the same optionToken with shorted option.
+     * @param longId token id to be "added" into the account. This is expected to have the same optionToken with shorted option.
      *               e.g: if the account currently have short call, we can added another "call token" into the account
      *               and convert the short position to a spread.
      */

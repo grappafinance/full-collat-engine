@@ -5,7 +5,7 @@ pragma solidity ^0.8.0;
 import {ReentrancyGuard} from "solmate/utils/ReentrancyGuard.sol";
 import {SafeCast} from "openzeppelin/utils/math/SafeCast.sol";
 
-// inheriting contracts from Grappa core
+// Inheriting contracts from Grappa core
 import {BaseEngine} from "grappa-core/core/engines/BaseEngine.sol";
 import {DebitSpread} from "grappa-core/core/engines/mixins/DebitSpread.sol";
 
@@ -22,7 +22,6 @@ import "grappa-core/config/enums.sol";
 import "grappa-core/config/errors.sol";
 
 // Full Margin library for FullMarginAccount struct
-
 import {FullMarginMath} from "./FullMarginMath.sol";
 import {FullMarginLib} from "./FullMarginLib.sol";
 
@@ -245,7 +244,9 @@ contract FullMarginEngine is DebitSpread, IMarginEngine, ReentrancyGuard {
      * @param account account in struct it is stored
      */
     function _getAccountDetail(FullMarginAccount memory account) internal view returns (FullMarginDetail memory detail) {
-        (TokenType tokenType, uint40 productId,, uint64 longStrike, uint64 shortStrike) = account.tokenId.parseTokenId();
+        // primaryStrike is the strike price the "minted" option long. Which is what the seller is short
+        // secondaryStrike is the strike price the "minted" option short. Which is what the seller is long (empty for simple call and put)
+        (TokenType tokenType, uint40 productId,, uint64 primaryStrike, uint64 secondaryStrike) = account.tokenId.parseTokenId();
 
         (,,, uint8 strikeId, uint8 collateralId) = ProductIdUtil.parseProductId(productId);
 
@@ -255,8 +256,8 @@ contract FullMarginEngine is DebitSpread, IMarginEngine, ReentrancyGuard {
 
         detail = FullMarginDetail({
             shortAmount: account.shortAmount,
-            longStrike: shortStrike,
-            shortStrike: longStrike,
+            longStrike: secondaryStrike,
+            shortStrike: primaryStrike,
             collateralAmount: account.collateralAmount,
             collateralDecimals: collateralDecimals,
             collateralizedWithStrike: collateralizedWithStrike,
