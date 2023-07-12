@@ -44,9 +44,11 @@ contract FullMarginEngine is DebitSpread, IMarginEngine, ReentrancyGuard {
     using SafeCast for uint256;
     using SafeCast for int256;
 
-    /*///////////////////////////////////////////////////////////////
-                                  Variables
-    //////////////////////////////////////////////////////////////*/
+    /**
+     * ========================================================= *
+     *                        Variables                          *
+     * ========================================================= *
+     */
 
     ///@dev subAccount => FullMarginAccount structure.
     ///     subAccount can be an address similar to the primary account, but has the last 8 bits different.
@@ -55,9 +57,11 @@ contract FullMarginEngine is DebitSpread, IMarginEngine, ReentrancyGuard {
 
     constructor(address _grappa, address _optionToken) BaseEngine(_grappa, _optionToken) {}
 
-    /*///////////////////////////////////////////////////////////////
-                        External Functions
-    //////////////////////////////////////////////////////////////*/
+    /**
+     * ========================================================= *
+     *                 External Functions                        *
+     * ========================================================= *
+     */
 
     /**
      * @notice This function serves as the main entry point for executing a batch of instructions for an sub-account.
@@ -148,7 +152,7 @@ contract FullMarginEngine is DebitSpread, IMarginEngine, ReentrancyGuard {
 
     /**
      * ========================================================= *
-     *      Override Sate changing functions in DebitSpread       *
+     *      Override Sate changing functions in DebitSpread      *
      * ========================================================= *
      */
 
@@ -164,8 +168,8 @@ contract FullMarginEngine is DebitSpread, IMarginEngine, ReentrancyGuard {
     }
 
     /**
-     * ========================================================= **
-     *                 Override view functions for BaseEngine
+     * ========================================================= *
+     *          Override view functions for BaseEngine           *
      * ========================================================= *
      */
 
@@ -226,7 +230,7 @@ contract FullMarginEngine is DebitSpread, IMarginEngine, ReentrancyGuard {
 
     /**
      * ========================================================= **
-     *                         Internal Functions
+     *                     Internal Functions
      * ========================================================= *
      */
 

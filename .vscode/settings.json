@@ -1,8 +1,10 @@
 {
-    "editor.formatOnSave": false,
-    "solidity.formatter": "prettier",
-    "[solidity]": {
-        "editor.defaultFormatter": "JuanBlanco.solidity"
-    },
-    "solidity.compileUsingRemoteVersion": "v0.8.18"
+    "solidity.compileUsingRemoteVersion": "v0.8.18",
+    "solidity.remappings": [
+        "solmate/=lib/solmate/src/",
+        "forge-std/=lib/forge-std/src/",
+        "openzeppelin/=lib/openzeppelin-contracts/contracts/",
+        "grappa-core/=lib/core-cash/src/",
+        "grappa-core-test/=lib/core-cash/test/"
+    ],
 }
