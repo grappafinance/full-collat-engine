@@ -35,7 +35,7 @@ library FullMarginLib {
 
     /**
      * @dev Increase the collateral in the account
-     * @param account FullMarginAccount memory that will be updated
+     * @param account FullMarginAccount storage that will be updated
      */
     function addCollateral(FullMarginAccount storage account, uint8 collateralId, uint80 amount) internal {
         uint80 cacheId = account.collateralId;
@@ -102,7 +102,7 @@ library FullMarginLib {
 
     /**
      * @dev Remove the amount of short call or put (debt) of the account
-     * @param account FullMarginAccount memory that will be updated in-place
+     * @param account FullMarginAccount storage that will be updated
      */
     function burnOption(FullMarginAccount storage account, uint256 tokenId, uint64 amount) internal {
         if (account.tokenId != tokenId) revert FM_InvalidToken();
@@ -133,16 +133,16 @@ library FullMarginLib {
     }
 
     /**
-     * @dev split an account's spread position into short + 1 token
+     * @dev split an account's spread position into short + 1 long token
      * @param account FullMarginAccount storage that will be updated
-     * @param spreadId id of spread to be parsed
+     * @param spreadId id of spread to be split
      */
     function split(FullMarginAccount storage account, uint256 spreadId, uint64 amount) internal {
-        // passed in spreadId should match the one in account memory (shortCallId or shortPutId)
+        // passed in spreadId should match the one in account struct
         if (spreadId != account.tokenId) revert FM_InvalidToken();
         if (amount != account.shortAmount) revert FM_SplitAmountMisMatch();
 
-        // convert to call: remove the "short strike" and update "tokenType" field
+        // convert to vanilla call or put: remove the "short strike" and update "tokenType" field
         account.tokenId = TokenIdUtil.convertToVanillaId(spreadId);
     }
 
