@@ -17,7 +17,6 @@ import "grappa-core/config/types.sol";
 import "grappa-core-test/shared/ActionHelper.sol";
 
 import "src/FullMarginEngine.sol";
-import "../utils/Utilities.sol";
 
 // Mocks
 import "../mocks/MockERC20.sol";

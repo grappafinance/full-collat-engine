@@ -1,10 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-/* ------------------------ *
- *    Full Margin Errors
- * -----------------------  */
-
 /// @dev full margin doesn't support this token type
 error FM_UnsupportedTokenType();
 
@@ -12,8 +8,8 @@ error FM_UnsupportedTokenType();
 error FM_UnsupportedAction();
 
 /// @dev invalid collateral:
-///         call can only be collateralized by underlying
-///         put can only be collateralized by strike
+///      call can only be collateralized by underlying
+///      put can only be collateralized by strike
 error FM_CannotMintOptionWithThisCollateral();
 
 /// @dev collateral id is wrong: the id doesn't match the existing collateral
@@ -39,3 +35,6 @@ error FM_AccountIsNotEmpty();
 
 /// @dev cannot remove collateral because there are expired longs
 error FM_ExpiredShortInAccount();
+
+/// @dev msg.sender doesn't have access to the subaccount
+error FM_NoAccess();

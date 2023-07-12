@@ -1,6 +1,6 @@
 {
-  "detectors_to_exclude": "timestamp,naming-convention,pragma,solc-version,uninitialized-local",
-  "filter_paths": "lib|test",
+  "detectors_to_exclude": "timestamp,naming-convention,pragma,solc-version,uninitialized-local,dead-code",
+  "filter_paths": "lib|test|script",
   "solc_remaps": [
     "solmate/=lib/solmate/src/",
     "forge-std/=lib/forge-std/src/",

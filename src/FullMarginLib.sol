@@ -1,13 +1,10 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import {FixedPointMathLib} from "solmate/utils/FixedPointMathLib.sol";
 import {SafeCast} from "openzeppelin/utils/math/SafeCast.sol";
 
-import "grappa-core//libraries/TokenIdUtil.sol";
-import "grappa-core//libraries/ProductIdUtil.sol";
-
-import "grappa-core/config/constants.sol";
+import "grappa-core/libraries/TokenIdUtil.sol";
+import "grappa-core/libraries/ProductIdUtil.sol";
 
 // Full margin types
 import "./types.sol";

@@ -19,11 +19,11 @@ library FullMarginMath {
     using FixedPointMathLib for uint256;
 
     /**
-     * @notice get minimum collateral denominated in strike asset
+     * @notice get minimum collateral requirement denominated in strike asset
      * @param _account margin account
-     * @return minCollatValueInStrike minimum collateral in strike (USD) value. with {BASE_UNIT} decimals
+     * @return minCollat minimum collateral in the native collateral asset's decimals
      */
-    function getMinCollateral(FullMarginDetail memory _account) internal pure returns (uint256 minCollatValueInStrike) {
+    function getCollateralRequirement(FullMarginDetail memory _account) internal pure returns (uint256 minCollat) {
         // don't need collateral
         if (_account.shortAmount == 0) return 0;
 
@@ -31,12 +31,13 @@ library FullMarginMath {
         uint256 unitAmount;
 
         if (_account.tokenType == TokenType.CALL) {
+            // call option must be collateralized with underlying
             unitAmount = _account.shortAmount;
         } else if (_account.tokenType == TokenType.CALL_SPREAD) {
             // if long strike <= short strike, all loss is covered, amount = 0
             // only consider when long strike > short strike
             if (_account.longStrike > _account.shortStrike) {
-                // only call spread has option to be collateralized by strike or underlying
+                // only call spread can be collateralized by both strike or underlying
                 if (_account.collateralizedWithStrike) {
                     // ex: 2000-4000 call spread with usdc collateral
                     // return (longStrike - shortStrike) * amount / unit
@@ -57,12 +58,14 @@ library FullMarginMath {
                 }
             }
         } else if (_account.tokenType == TokenType.PUT) {
+            // put option must be collateralized with strike (USDC) asset
             // unitAmount = shortStrike * amount / UNIT
             unitAmount = _account.shortStrike * _account.shortAmount;
             unchecked {
                 unitAmount = unitAmount / UNIT;
             }
         } else if (_account.tokenType == TokenType.PUT_SPREAD) {
+            // put spread must be collateralized with strike (USDC) asset
             // if long strike >= short strike, all loss is covered, amount = 0
             // only consider when long strike < short strike
             if (_account.longStrike < _account.shortStrike) {

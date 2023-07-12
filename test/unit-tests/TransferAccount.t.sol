@@ -53,7 +53,7 @@ contract TransferAccount is FullMarginFixture {
 
     function testCannotStealAccount() public {
         vm.prank(alice);
-        vm.expectRevert(NoAccess.selector);
+        vm.expectRevert(FM_NoAccess.selector);
         engine.transferAccount(address(this), alice);
     }
 }
