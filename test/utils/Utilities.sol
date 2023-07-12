@@ -32,7 +32,4 @@ abstract contract Utilities is Test {
             uint160(uint256(keccak256(abi.encodePacked(bytes1(0xda), bytes1(0x94), _origin, bytes1(0x84), uint32(_nonce)))))
         );
     }
-
-    // add a function prefixed with test here so forge coverage will ignore this file
-    function testUtils() public {}
 }

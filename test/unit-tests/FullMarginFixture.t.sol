@@ -3,6 +3,8 @@ pragma solidity ^0.8.0;
 
 import "forge-std/Test.sol";
 
+import "forge-std/Script.sol";
+
 // Grappa contract & OptionToken
 
 import "grappa-core/core/Grappa.sol";
@@ -26,7 +28,7 @@ import "../mocks/MockOracle.sol";
 /**
  * helper contract for full margin integration test to inherit.
  */
-contract FullMarginFixture is Test, ActionHelper, Utilities {
+contract FullMarginFixture is Test, ActionHelper, Script {
     FullMarginEngine internal engine;
     Grappa internal grappa;
     CashOptionToken internal option;
@@ -59,12 +61,11 @@ contract FullMarginFixture is Test, ActionHelper, Utilities {
 
         oracle = new MockOracle(); // nonce: 3
 
-        // predict address of margin account and use it here
-        address grappaAddr = predictAddress(address(this), 6);
+        // predict address of grappa account and use it here
+        address grappaAddr = computeCreateAddress(address(this), 6);
 
         option = new CashOptionToken(grappaAddr, address(0)); // nonce: 4
 
-        // predict address of margin account and use it here
         address grappaImplementation = address(new Grappa(address(option))); // nonce: 5
 
         bytes memory data = abi.encodeWithSelector(Grappa.initialize.selector, address(this));
@@ -127,7 +128,4 @@ contract FullMarginFixture is Test, ActionHelper, Utilities {
 
         vm.stopPrank();
     }
-
-    // place holder here so forge coverage won't pick it up
-    function test() public {}
 }
