@@ -12,7 +12,6 @@
   "devDependencies": {
     "@commitlint/cli": "^17.0.0",
     "@commitlint/config-conventional": "^17.0.0",
-    "eth-create2-calculator": "^1.1.5",
     "husky": "^8.0.1"
   }
 }
