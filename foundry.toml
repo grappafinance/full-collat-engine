@@ -4,15 +4,6 @@ optimizer = true
 optimizer_runs = 100000
 # via_ir = true # temporarily disable for faster snapshot
 
-gas_reports = [
-  # "*",
-  "Grappa",
-  "OptionToken",
-  "FullMarginEngine",
-  "CrossMarginEngine",
-  "AdvancedMarginEngine",
-  "ChainlinkOracle"
-]
 
 [fmt]
 line_length=130
