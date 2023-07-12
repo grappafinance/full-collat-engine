@@ -25,6 +25,8 @@ This is the repository contains the full collateral margin engine for Grappa cor
 * Call spread (collateralized with underlying or strike)
 * Put spread (collateralized with strike)
 
+For more details about the codebase and architecture, please goes to [docs](/docs/)
+
 ## Get Started
 
 ```shell

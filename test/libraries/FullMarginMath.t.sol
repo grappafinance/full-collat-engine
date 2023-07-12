@@ -15,7 +15,7 @@ import "src/types.sol";
  */
 contract FullMarginMathTester {
     function getMinCollateral(FullMarginDetail calldata _detail) external pure returns (uint256) {
-        uint256 result = FullMarginMath.getMinCollateral(_detail);
+        uint256 result = FullMarginMath.getCollateralRequirement(_detail);
         return result;
     }
 }

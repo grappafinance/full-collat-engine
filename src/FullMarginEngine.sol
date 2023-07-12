@@ -1,36 +1,33 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-// imported contracts and libraries
+// Contracts and libraries
 import {ReentrancyGuard} from "solmate/utils/ReentrancyGuard.sol";
 import {SafeCast} from "openzeppelin/utils/math/SafeCast.sol";
 
-// inheriting contracts from Grappa core
+// Inheriting contracts from Grappa core
 import {BaseEngine} from "grappa-core/core/engines/BaseEngine.sol";
 import {DebitSpread} from "grappa-core/core/engines/mixins/DebitSpread.sol";
 
-// interfaces
-import {IGrappa} from "grappa-core/interfaces/IGrappa.sol";
+// Interfaces from Grappa core
 import {IMarginEngine} from "grappa-core/interfaces/IMarginEngine.sol";
 
-// libraries
+// Libraries from Grappa core
 import {TokenIdUtil} from "grappa-core/libraries/TokenIdUtil.sol";
 import {ProductIdUtil} from "grappa-core/libraries/ProductIdUtil.sol";
 
-// constants and types
+// Constants and types from Grappa core
 import "grappa-core/config/types.sol";
 import "grappa-core/config/enums.sol";
-import "grappa-core/config/constants.sol";
 import "grappa-core/config/errors.sol";
 
+// Full Margin library for FullMarginAccount struct
 import {FullMarginMath} from "./FullMarginMath.sol";
 import {FullMarginLib} from "./FullMarginLib.sol";
 
 // Full margin types
 import "./types.sol";
 import "./errors.sol";
-
-import "forge-std/console2.sol";
 
 /**
  * @title   FullMarginEngine
@@ -47,9 +44,11 @@ contract FullMarginEngine is DebitSpread, IMarginEngine, ReentrancyGuard {
     using SafeCast for uint256;
     using SafeCast for int256;
 
-    /*///////////////////////////////////////////////////////////////
-                                  Variables
-    //////////////////////////////////////////////////////////////*/
+    /**
+     * ========================================================= *
+     *                        Variables                          *
+     * ========================================================= *
+     */
 
     ///@dev subAccount => FullMarginAccount structure.
     ///     subAccount can be an address similar to the primary account, but has the last 8 bits different.
@@ -58,13 +57,15 @@ contract FullMarginEngine is DebitSpread, IMarginEngine, ReentrancyGuard {
 
     constructor(address _grappa, address _optionToken) BaseEngine(_grappa, _optionToken) {}
 
-    /*///////////////////////////////////////////////////////////////
-                        External Functions
-    //////////////////////////////////////////////////////////////*/
+    /**
+     * ========================================================= *
+     *                 External Functions                        *
+     * ========================================================= *
+     */
 
     /**
-     * @notice main entry point of execute bunch of instructions to an account
-     * @dev whether an account is above margin requirement is only checked once at the end
+     * @notice This function serves as the main entry point for executing a batch of instructions for an sub-account.
+     * @dev Margin requirement check for an sub-account is only performed once, at the end.
      */
     function execute(address _subAccount, ActionArgs[] calldata actions) public override nonReentrant {
         _assertCallerHasAccess(_subAccount);
@@ -91,7 +92,7 @@ contract FullMarginEngine is DebitSpread, IMarginEngine, ReentrancyGuard {
      * @notice payout to user on settlement.
      * @dev this can only triggered by Grappa, would only be called on settlement.
      * @param _asset asset to transfer
-     * @param _recipient receiver
+     * @param _recipient receiver address
      * @param _amount amount of asset in its native decimal
      */
     function payCashValue(address _asset, address _recipient, uint256 _amount) public override(BaseEngine, IMarginEngine) {
@@ -109,13 +110,13 @@ contract FullMarginEngine is DebitSpread, IMarginEngine, ReentrancyGuard {
     }
 
     /**
-     * @notice  move an account to someone else
-     * @dev     expected to be call by account owner
+     * @notice transfer an account to someone else
+     * @dev expected to be call by account owner
      * @param _subAccount the id of subaccount to transfer
      * @param _newSubAccount the id of receiving account
      */
     function transferAccount(address _subAccount, address _newSubAccount) external {
-        if (!_isPrimaryAccountFor(msg.sender, _subAccount)) revert NoAccess();
+        if (!_isPrimaryAccountFor(msg.sender, _subAccount)) revert FM_NoAccess();
 
         if (!marginAccounts[_newSubAccount].isEmpty()) revert FM_AccountIsNotEmpty();
         marginAccounts[_newSubAccount] = marginAccounts[_subAccount];
@@ -151,7 +152,7 @@ contract FullMarginEngine is DebitSpread, IMarginEngine, ReentrancyGuard {
 
     /**
      * ========================================================= *
-     *      Override Sate changing functions in DebitSpread       *
+     *      Override Sate changing functions in DebitSpread      *
      * ========================================================= *
      */
 
@@ -167,8 +168,8 @@ contract FullMarginEngine is DebitSpread, IMarginEngine, ReentrancyGuard {
     }
 
     /**
-     * ========================================================= **
-     *                 Override view functions for BaseEngine
+     * ========================================================= *
+     *          Override view functions for BaseEngine           *
      * ========================================================= *
      */
 
@@ -229,7 +230,7 @@ contract FullMarginEngine is DebitSpread, IMarginEngine, ReentrancyGuard {
 
     /**
      * ========================================================= **
-     *                         Internal Functions
+     *                     Internal Functions
      * ========================================================= *
      */
 
@@ -239,7 +240,7 @@ contract FullMarginEngine is DebitSpread, IMarginEngine, ReentrancyGuard {
      */
     function _getMinCollateral(FullMarginAccount memory account) internal view returns (uint256) {
         FullMarginDetail memory detail = _getAccountDetail(account);
-        return detail.getMinCollateral();
+        return detail.getCollateralRequirement();
     }
 
     /**
@@ -247,7 +248,9 @@ contract FullMarginEngine is DebitSpread, IMarginEngine, ReentrancyGuard {
      * @param account account in struct it is stored
      */
     function _getAccountDetail(FullMarginAccount memory account) internal view returns (FullMarginDetail memory detail) {
-        (TokenType tokenType, uint40 productId,, uint64 longStrike, uint64 shortStrike) = account.tokenId.parseTokenId();
+        // primaryStrike is the strike price the "minted" option long. Which is what the seller is short
+        // secondaryStrike is the strike price the "minted" option short. Which is what the seller is long (empty for simple call and put)
+        (TokenType tokenType, uint40 productId,, uint64 primaryStrike, uint64 secondaryStrike) = account.tokenId.parseTokenId();
 
         (,,, uint8 strikeId, uint8 collateralId) = ProductIdUtil.parseProductId(productId);
 
@@ -257,8 +260,8 @@ contract FullMarginEngine is DebitSpread, IMarginEngine, ReentrancyGuard {
 
         detail = FullMarginDetail({
             shortAmount: account.shortAmount,
-            longStrike: shortStrike,
-            shortStrike: longStrike,
+            longStrike: secondaryStrike,
+            shortStrike: primaryStrike,
             collateralAmount: account.collateralAmount,
             collateralDecimals: collateralDecimals,
             collateralizedWithStrike: collateralizedWithStrike,

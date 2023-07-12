@@ -1,13 +1,10 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import {FixedPointMathLib} from "solmate/utils/FixedPointMathLib.sol";
 import {SafeCast} from "openzeppelin/utils/math/SafeCast.sol";
 
-import "grappa-core//libraries/TokenIdUtil.sol";
-import "grappa-core//libraries/ProductIdUtil.sol";
-
-import "grappa-core/config/constants.sol";
+import "grappa-core/libraries/TokenIdUtil.sol";
+import "grappa-core/libraries/ProductIdUtil.sol";
 
 // Full margin types
 import "./types.sol";
@@ -15,10 +12,9 @@ import "./errors.sol";
 
 /**
  * @title FullMarginLib
- * @dev   This library is in charge of updating the full account struct.
- *        whether a "token id" is valid or not is checked in Grappa.sol.
- *
- *        FullMarginLib only supports 1 collat type and 1 short position
+ * @dev   This library is in charge of updating the full account struct in storage.
+ *        whether a "tokenId" is valid or not during minting / burning is checked in Grappa.sol.
+ *        FullMarginLib only supports 1 collat type and 1 short position (could combined with 1 long)
  */
 library FullMarginLib {
     using TokenIdUtil for uint256;
@@ -35,7 +31,7 @@ library FullMarginLib {
 
     /**
      * @dev Increase the collateral in the account
-     * @param account FullMarginAccount memory that will be updated
+     * @param account FullMarginAccount storage that will be updated
      */
     function addCollateral(FullMarginAccount storage account, uint8 collateralId, uint80 amount) internal {
         uint80 cacheId = account.collateralId;
@@ -102,7 +98,7 @@ library FullMarginLib {
 
     /**
      * @dev Remove the amount of short call or put (debt) of the account
-     * @param account FullMarginAccount memory that will be updated in-place
+     * @param account FullMarginAccount storage that will be updated
      */
     function burnOption(FullMarginAccount storage account, uint256 tokenId, uint64 amount) internal {
         if (account.tokenId != tokenId) revert FM_InvalidToken();
@@ -117,7 +113,7 @@ library FullMarginLib {
      * @dev shortId and longId already have the same optionType, productId, expiry
      * @param account FullMarginAccount storage that will be updated
      * @param shortId existing short position to be converted into spread
-     * @param longId token to be "added" into the account. This is expected to have the same optionToken with shorted option.
+     * @param longId token id to be "added" into the account. This is expected to have the same optionToken with shorted option.
      *               e.g: if the account currently have short call, we can added another "call token" into the account
      *               and convert the short position to a spread.
      */
@@ -133,16 +129,16 @@ library FullMarginLib {
     }
 
     /**
-     * @dev split an account's spread position into short + 1 token
+     * @dev split an account's spread position into short + 1 long token
      * @param account FullMarginAccount storage that will be updated
-     * @param spreadId id of spread to be parsed
+     * @param spreadId id of spread to be split
      */
     function split(FullMarginAccount storage account, uint256 spreadId, uint64 amount) internal {
-        // passed in spreadId should match the one in account memory (shortCallId or shortPutId)
+        // passed in spreadId should match the one in account struct
         if (spreadId != account.tokenId) revert FM_InvalidToken();
         if (amount != account.shortAmount) revert FM_SplitAmountMisMatch();
 
-        // convert to call: remove the "short strike" and update "tokenType" field
+        // convert to vanilla call or put: remove the "short strike" and update "tokenType" field
         account.tokenId = TokenIdUtil.convertToVanillaId(spreadId);
     }
 
