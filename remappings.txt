@@ -1,4 +1,4 @@
 solmate/=lib/solmate/src/
 forge-std/=lib/forge-std/src/
 openzeppelin/=lib/openzeppelin-contracts/contracts/
-grappa-core/=lib/core-cash/
+grappa-core/=lib/core-cash/src/

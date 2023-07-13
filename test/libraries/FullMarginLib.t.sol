@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import {TokenIdUtil} from "grappa-core/src/libraries/TokenIdUtil.sol";
-import {ProductIdUtil} from "grappa-core/src/libraries/ProductIdUtil.sol";
-import "grappa-core/src/config/constants.sol";
-import "grappa-core/src/config/errors.sol";
+import {TokenIdUtil} from "grappa-core/libraries/TokenIdUtil.sol";
+import {ProductIdUtil} from "grappa-core/libraries/ProductIdUtil.sol";
+import "grappa-core/config/constants.sol";
+import "grappa-core/config/errors.sol";
 
 import {Test, stdError} from "forge-std/Test.sol";
 

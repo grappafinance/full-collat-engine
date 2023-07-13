@@ -2,9 +2,9 @@
 pragma solidity ^0.8.0;
 
 import {FixedPointMathLib} from "solmate/utils/FixedPointMathLib.sol";
-import {NumberUtil} from "grappa-core/src/libraries/NumberUtil.sol";
+import {NumberUtil} from "grappa-core/libraries/NumberUtil.sol";
 
-import {UNIT, UNIT_DECIMALS} from "grappa-core/src/config/constants.sol";
+import {UNIT, UNIT_DECIMALS} from "grappa-core/config/constants.sol";
 
 // Full margin types
 import "./types.sol";

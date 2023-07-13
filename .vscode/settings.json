@@ -1,0 +1,12 @@
+{
+  "solidity.compileUsingRemoteVersion": "v0.8.20",
+  "solidity.packageDefaultDependenciesContractsDirectory": "src",
+  "solidity.packageDefaultDependenciesDirectory": "lib",
+  "solidity.remappings": [
+      "grappa-core/=lib/core-cash/src/",
+      "solmate/=lib/solmate/src/",
+      "forge-std/=lib/forge-std/src/",
+      "openzeppelin/=lib/openzeppelin-contracts/contracts/",
+  ],
+  "solidity.defaultCompiler": "localNodeModule"
+}

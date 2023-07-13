@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import {TokenType} from "grappa-core/src/config/enums.sol";
+import {TokenType} from "grappa-core/config/enums.sol";
 
 /// @dev data struct used to stored all information about a short position in storage
 /// @param tokenId the grappa token id of minted option (can be call, put, credit / debit call spread, credit / debit put spread)

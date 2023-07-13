@@ -4,8 +4,8 @@ pragma solidity ^0.8.0;
 import {Test} from "forge-std/Test.sol";
 
 import {FullMarginMath} from "src/FullMarginMath.sol";
-import "grappa-core/src/config/constants.sol";
-import "grappa-core/src/config/errors.sol";
+import "grappa-core/config/constants.sol";
+import "grappa-core/config/errors.sol";
 
 import "src/types.sol";
 

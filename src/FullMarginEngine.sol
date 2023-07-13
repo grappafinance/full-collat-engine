@@ -6,20 +6,20 @@ import {ReentrancyGuard} from "solmate/utils/ReentrancyGuard.sol";
 import {SafeCast} from "openzeppelin/utils/math/SafeCast.sol";
 
 // Inheriting contracts from Grappa core
-import {BaseEngine} from "grappa-core/src/core/engines/BaseEngine.sol";
-import {DebitSpread} from "grappa-core/src/core/engines/mixins/DebitSpread.sol";
+import {BaseEngine} from "grappa-core/core/engines/BaseEngine.sol";
+import {DebitSpread} from "grappa-core/core/engines/mixins/DebitSpread.sol";
 
 // Interfaces from Grappa core
-import {IMarginEngine} from "grappa-core/src/interfaces/IMarginEngine.sol";
+import {IMarginEngine} from "grappa-core/interfaces/IMarginEngine.sol";
 
 // Libraries from Grappa core
-import {TokenIdUtil} from "grappa-core/src/libraries/TokenIdUtil.sol";
-import {ProductIdUtil} from "grappa-core/src/libraries/ProductIdUtil.sol";
+import {TokenIdUtil} from "grappa-core/libraries/TokenIdUtil.sol";
+import {ProductIdUtil} from "grappa-core/libraries/ProductIdUtil.sol";
 
 // Constants and types from Grappa core
-import "grappa-core/src/config/types.sol";
-import "grappa-core/src/config/enums.sol";
-import "grappa-core/src/config/errors.sol";
+import "grappa-core/config/types.sol";
+import "grappa-core/config/enums.sol";
+import "grappa-core/config/errors.sol";
 
 // Full Margin library for FullMarginAccount struct
 import {FullMarginMath} from "./FullMarginMath.sol";
