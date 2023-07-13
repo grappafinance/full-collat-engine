@@ -4,9 +4,6 @@
 [submodule "lib/solmate"]
 	path = lib/solmate
 	url = https://github.com/transmissions11/solmate
-[submodule "lib/array-lib"]
-	path = lib/array-lib
-	url = https://github.com/grappafinance/array-lib
 [submodule "lib/core-cash"]
 	path = lib/core-cash
 	url = https://github.com/grappafinance/core-cash

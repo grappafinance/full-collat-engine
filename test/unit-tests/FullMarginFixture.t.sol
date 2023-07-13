@@ -14,7 +14,8 @@ import "grappa-core/core/CashOptionToken.sol";
 import "grappa-core/config/enums.sol";
 import "grappa-core/config/types.sol";
 
-import "grappa-core-test/shared/ActionHelper.sol";
+// helper from Grappa core repo
+import "lib/core-cash/test/shared/ActionHelper.sol";
 
 import "src/FullMarginEngine.sol";
 
