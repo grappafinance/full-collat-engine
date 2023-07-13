@@ -4,10 +4,10 @@ pragma solidity ^0.8.0;
 // import test base and helpers.
 import {FullMarginFixture} from "./FullMarginFixture.t.sol";
 
-import "grappa-core/config/enums.sol";
-import "grappa-core/config/types.sol";
-import "grappa-core/config/constants.sol";
-import "grappa-core/config/errors.sol";
+import "grappa-core/src/config/enums.sol";
+import "grappa-core/src/config/types.sol";
+import "grappa-core/src/config/constants.sol";
+import "grappa-core/src/config/errors.sol";
 
 import "src/errors.sol";
 

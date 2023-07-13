@@ -5,7 +5,6 @@
     "solmate/=lib/solmate/src/",
     "forge-std/=lib/forge-std/src/",
     "openzeppelin/=lib/openzeppelin-contracts/contracts/",
-    "grappa-core/=lib/core-cash/src/",
-    "grappa-core-test/=lib/core-cash/test/"
+    "grappa-core/=lib/core-cash/"
   ]
 }

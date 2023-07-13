@@ -7,14 +7,14 @@ import "forge-std/Script.sol";
 
 // Grappa contract & OptionToken
 
-import "grappa-core/core/Grappa.sol";
-import "grappa-core/core/GrappaProxy.sol";
-import "grappa-core/core/CashOptionToken.sol";
+import "grappa-core/src/core/Grappa.sol";
+import "grappa-core/src/core/GrappaProxy.sol";
+import "grappa-core/src/core/CashOptionToken.sol";
 
-import "grappa-core/config/enums.sol";
-import "grappa-core/config/types.sol";
+import "grappa-core/src/config/enums.sol";
+import "grappa-core/src/config/types.sol";
 
-import "grappa-core-test/shared/ActionHelper.sol";
+import "grappa-core/test/shared/ActionHelper.sol";
 
 import "src/FullMarginEngine.sol";
 
