@@ -20,7 +20,8 @@ contract MergeOption_Action_Test is FullMarginFixture {
 
     uint256 public existingTokenId;
 
-    function setUp() public {
+    function setUp() public override {
+        FullMarginFixture.setUp();
         weth.mint(address(this), depositAmount);
         weth.approve(address(engine), type(uint256).max);
 

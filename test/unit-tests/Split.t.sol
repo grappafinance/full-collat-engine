@@ -19,7 +19,8 @@ contract SplitCallSpread_Test is FullMarginFixture {
     uint256 public amount = 1 * UNIT;
     uint256 public spreadId;
 
-    function setUp() public {
+    function setUp() public override {
+        FullMarginFixture.setUp();
         weth.mint(address(this), 100 ether);
         weth.approve(address(engine), type(uint256).max);
 
@@ -84,7 +85,8 @@ contract SplitPutSpread_Test is FullMarginFixture {
     uint256 public amount = 1 * UNIT;
     uint256 public spreadId;
 
-    function setUp() public {
+    function setUp() public override {
+        FullMarginFixture.setUp();
         usdc.mint(address(this), 1000_000 * 1e6);
         usdc.approve(address(engine), type(uint256).max);
 

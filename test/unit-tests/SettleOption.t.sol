@@ -17,7 +17,8 @@ contract Settle_CoveredCall_Test is FullMarginFixture {
     uint256 private tokenId;
     uint64 private strike;
 
-    function setUp() public {
+    function setUp() public override {
+        FullMarginFixture.setUp();
         weth.mint(address(this), 1000 * 1e18);
         weth.approve(address(engine), type(uint256).max);
 
@@ -136,7 +137,8 @@ contract Settle_Put_Test is FullMarginFixture {
     uint256 private tokenId;
     uint64 private strike;
 
-    function setUp() public {
+    function setUp() public override {
+        FullMarginFixture.setUp();
         usdc.mint(address(this), 1000_000 * 1e6);
         usdc.approve(address(engine), type(uint256).max);
 
@@ -251,7 +253,8 @@ contract Settle_CallSpread_Test is FullMarginFixture {
     uint64 private longStrike;
     uint64 private shortStrike;
 
-    function setUp() public {
+    function setUp() public override {
+        FullMarginFixture.setUp();
         weth.mint(address(this), 1000 ether);
         weth.approve(address(engine), type(uint256).max);
 
@@ -386,7 +389,8 @@ contract Settle_CreditCallSpread_Test is FullMarginFixture {
     uint64 private longStrike;
     uint64 private shortStrike;
 
-    function setUp() public {
+    function setUp() public override {
+        FullMarginFixture.setUp();
         usdc.mint(address(this), 1000 ether);
         usdc.approve(address(engine), type(uint256).max);
 
@@ -495,7 +499,8 @@ contract Settle_DebitCallSpread_Test is FullMarginFixture {
 
     uint64 private amount = uint64(1 * UNIT);
 
-    function setUp() public {
+    function setUp() public override {
+        FullMarginFixture.setUp();
         expiry = block.timestamp + 14 days;
         oracle.setSpotPrice(address(weth), 3000 * UNIT);
 
@@ -578,7 +583,8 @@ contract Settle_DebitPutSpread_Test is FullMarginFixture {
     uint256 public expiry;
     uint64 private amount = uint64(1 * UNIT);
 
-    function setUp() public {
+    function setUp() public override {
+        FullMarginFixture.setUp();
         expiry = block.timestamp + 14 days;
         oracle.setSpotPrice(address(weth), 3000 * UNIT);
 
@@ -665,7 +671,8 @@ contract Settle_PutSpread_Test is FullMarginFixture {
     uint64 private longStrike;
     uint64 private shortStrike;
 
-    function setUp() public {
+    function setUp() public override {
+        FullMarginFixture.setUp();
         usdc.mint(address(this), 1000_000 * 1e6);
         usdc.approve(address(engine), type(uint256).max);
 

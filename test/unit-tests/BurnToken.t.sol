@@ -20,7 +20,8 @@ contract BurnOption_Action_Test is FullMarginFixture {
     uint256 public amount = 1 * UNIT;
     uint256 public tokenId;
 
-    function setUp() public {
+    function setUp() public override {
+        FullMarginFixture.setUp();
         weth.mint(address(this), depositAmount);
         weth.approve(address(engine), type(uint256).max);
 

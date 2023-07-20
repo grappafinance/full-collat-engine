@@ -16,7 +16,8 @@ import "src/errors.sol";
 contract RemoveCollateral_Action_Test is FullMarginFixture {
     uint256 private depositAmount = 1000 * 1e6;
 
-    function setUp() public {
+    function setUp() public override {
+        FullMarginFixture.setUp();
         // approve engine
         usdc.mint(address(this), 1000_000_000 * 1e6);
         usdc.approve(address(engine), type(uint256).max);

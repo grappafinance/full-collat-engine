@@ -12,7 +12,8 @@ import "src/errors.sol";
 contract TransferAccount_Test is FullMarginFixture {
     uint256 public depositAmount = 1000 * 1e6;
 
-    function setUp() public {
+    function setUp() public override {
+        FullMarginFixture.setUp();
         usdc.mint(address(this), 1000_000 * 1e6);
         usdc.approve(address(engine), type(uint256).max);
 

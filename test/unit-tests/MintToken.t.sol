@@ -15,7 +15,9 @@ import "src/errors.sol";
 contract MintOption_Action_Test is FullMarginFixture {
     uint256 public expiry;
 
-    function setUp() public {
+    function setUp() public override {
+        FullMarginFixture.setUp();
+
         usdc.mint(address(this), 1000_000 * 1e6);
         usdc.approve(address(engine), type(uint256).max);
 
