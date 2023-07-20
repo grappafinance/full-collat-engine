@@ -13,7 +13,7 @@ import "grappa-core/config/errors.sol";
 import "src/errors.sol";
 
 // solhint-disable-next-line contract-name-camelcase
-contract TestBurnOption_FM is FullMarginFixture {
+contract BurnOption_Action_Test is FullMarginFixture {
     uint256 public expiry;
     uint256 public strikePrice = 4000 * UNIT;
     uint256 public depositAmount = 1 ether;

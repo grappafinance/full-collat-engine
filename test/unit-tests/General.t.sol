@@ -11,7 +11,7 @@ import "grappa-core/config/errors.sol";
 
 import "src/errors.sol";
 
-contract FullMarginEngineGeneral is FullMarginFixture {
+contract FullMarginEngineGeneralTest is FullMarginFixture {
     function setUp() public {
         usdc.mint(address(this), 1000_000 * 1e6);
         usdc.approve(address(engine), type(uint256).max);

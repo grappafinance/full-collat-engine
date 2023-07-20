@@ -10,7 +10,7 @@ import "grappa-core/config/constants.sol";
 import "grappa-core/config/errors.sol";
 
 // solhint-disable-next-line contract-name-camelcase
-contract TestSettleCoveredCall_FM is FullMarginFixture {
+contract Settle_CoveredCall_Test is FullMarginFixture {
     uint256 public expiry;
 
     uint64 private amount = uint64(1 * UNIT);
@@ -129,7 +129,7 @@ contract TestSettleCoveredCall_FM is FullMarginFixture {
 }
 
 // solhint-disable-next-line contract-name-camelcase
-contract TestSettlePut_FM is FullMarginFixture {
+contract Settle_Put_Test is FullMarginFixture {
     uint256 public expiry;
 
     uint64 private amount = uint64(1 * UNIT);
@@ -243,7 +243,7 @@ contract TestSettlePut_FM is FullMarginFixture {
 }
 
 // solhint-disable-next-line contract-name-camelcase
-contract TestSettleCallSpread_FM is FullMarginFixture {
+contract Settle_CallSpread_Test is FullMarginFixture {
     uint256 public expiry;
 
     uint64 private amount = uint64(1 * UNIT);
@@ -377,7 +377,7 @@ contract TestSettleCallSpread_FM is FullMarginFixture {
 
 // call spread settled with strike asset
 // solhint-disable-next-line contract-name-camelcase
-contract TestSettleCreditCallSpread_FM is FullMarginFixture {
+contract Settle_CreditCallSpread_Test is FullMarginFixture {
     // vault is short 4000, long 5000 strike
     uint256 public expiry;
 
@@ -489,7 +489,7 @@ contract TestSettleCreditCallSpread_FM is FullMarginFixture {
     }
 }
 
-contract TestSettleDebitCallSpread_FM is FullMarginFixture {
+contract Settle_DebitCallSpread_Test is FullMarginFixture {
     // vault is with long 4000 strike, short 5000 strike
     uint256 public expiry;
 
@@ -573,7 +573,7 @@ contract TestSettleDebitCallSpread_FM is FullMarginFixture {
     }
 }
 
-contract TestSettleDebitPutSpread_FM is FullMarginFixture {
+contract Settle_DebitPutSpread_Test is FullMarginFixture {
     // vault is with long 2000 PUT, short 1500 PUT
     uint256 public expiry;
     uint64 private amount = uint64(1 * UNIT);
@@ -657,7 +657,7 @@ contract TestSettleDebitPutSpread_FM is FullMarginFixture {
 }
 
 // solhint-disable-next-line contract-name-camelcase
-contract TestSettlePutSpread_FM is FullMarginFixture {
+contract Settle_PutSpread_Test is FullMarginFixture {
     uint256 public expiry;
 
     uint64 private amount = uint64(1 * UNIT);

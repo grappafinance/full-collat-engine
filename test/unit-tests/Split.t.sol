@@ -11,8 +11,7 @@ import "grappa-core/config/errors.sol";
 
 import "src/errors.sol";
 
-// solhint-disable-next-line contract-name-camelcase
-contract TestSplitCallSpread_FM is FullMarginFixture {
+contract SplitCallSpread_Test is FullMarginFixture {
     uint256 public expiry;
     uint256 public strikePriceLow = 4000 * UNIT;
     uint256 public strikePriceHigh = 5000 * UNIT;
@@ -77,8 +76,7 @@ contract TestSplitCallSpread_FM is FullMarginFixture {
     }
 }
 
-// solhint-disable-next-line contract-name-camelcase
-contract TestSplitPutSpread_FM is FullMarginFixture {
+contract SplitPutSpread_Test is FullMarginFixture {
     uint256 public expiry;
     uint256 public strikePriceHigh = 2000 * UNIT;
     uint256 public strikePriceLow = 1900 * UNIT;

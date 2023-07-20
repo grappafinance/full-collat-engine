@@ -12,7 +12,7 @@ import "grappa-core/config/errors.sol";
 import "src/errors.sol";
 
 // solhint-disable-next-line contract-name-camelcase
-contract TestMint_FM is FullMarginFixture {
+contract MintOption_Action_Test is FullMarginFixture {
     uint256 public expiry;
 
     function setUp() public {
