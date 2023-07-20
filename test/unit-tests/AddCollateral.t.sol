@@ -23,7 +23,7 @@ contract AddCollateral_Action_Test is FullMarginFixture {
         weth.approve(address(engine), type(uint256).max);
     }
 
-    function testAddCollateralChangeStorage() public {
+    function test_AddCollateral_ChangeStorage() public {
         uint256 depositAmount = 1000 * 1e6;
 
         ActionArgs[] memory actions = new ActionArgs[](1);
@@ -35,7 +35,7 @@ contract AddCollateral_Action_Test is FullMarginFixture {
         assertEq(_collateralAmount, depositAmount);
     }
 
-    function testAddCollateralMoveBalance() public {
+    function test_AddCollateral_MoveBalance() public {
         uint256 engineBalanceBefore = usdc.balanceOf(address(engine));
         uint256 myBalanceBefore = usdc.balanceOf(address(this));
         uint256 depositAmount = 1000 * 1e6;
@@ -51,7 +51,7 @@ contract AddCollateral_Action_Test is FullMarginFixture {
         assertEq(engineBalanceAfter - engineBalanceBefore, depositAmount);
     }
 
-    function testAddCollateralLoopMoveBalances() public {
+    function test_AddCollateral_Loop_MoveBalances() public {
         uint256 engineBalanceBefore = usdc.balanceOf(address(engine));
         uint256 myBalanceBefore = usdc.balanceOf(address(this));
         uint256 depositAmount = 500 * 1e6;
@@ -68,7 +68,7 @@ contract AddCollateral_Action_Test is FullMarginFixture {
         assertEq(engineBalanceAfter - engineBalanceBefore, depositAmount * 2);
     }
 
-    function testCannotAddDifferentProductToSameAccount() public {
+    function test_Cannot_AddDifferentCollatToSameAccount() public {
         uint256 usdcAmount = 500 * 1e6;
         uint256 wethAmount = 10 * 1e18;
 
@@ -80,7 +80,7 @@ contract AddCollateral_Action_Test is FullMarginFixture {
         engine.execute(address(this), actions);
     }
 
-    function testCannotAddCollatFromOthers() public {
+    function test_Cannot_AddCollatFromOthers() public {
         ActionArgs[] memory actions = new ActionArgs[](1);
         actions[0] = createAddCollateralAction(usdcId, address(alice), 100);
         vm.expectRevert(BM_InvalidFromAddress.selector);

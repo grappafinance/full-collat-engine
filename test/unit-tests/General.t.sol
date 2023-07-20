@@ -21,7 +21,7 @@ contract FullMarginEngineGeneralTest is FullMarginFixture {
         weth.approve(address(engine), type(uint256).max);
     }
 
-    function testCannotCallAddLong() public {
+    function test_Cannot_CallAddLong() public {
         ActionArgs[] memory actions = new ActionArgs[](1);
         actions[0] = createAddLongAction(0, 0, address(this));
 
@@ -29,7 +29,7 @@ contract FullMarginEngineGeneralTest is FullMarginFixture {
         engine.execute(address(this), actions);
     }
 
-    function testCannotCallRemoveLong() public {
+    function test_Cannot_CallRemoveLong() public {
         ActionArgs[] memory actions = new ActionArgs[](1);
         actions[0] = createRemoveLongAction(0, 0, address(this));
 
@@ -37,12 +37,12 @@ contract FullMarginEngineGeneralTest is FullMarginFixture {
         engine.execute(address(this), actions);
     }
 
-    function testCannotCallPayoutFromAnybody() public {
+    function test_Cannot_CallPayoutFromAnybody() public {
         vm.expectRevert(NoAccess.selector);
         engine.payCashValue(address(usdc), address(this), UNIT);
     }
 
-    function testGetMinCollateral() public {
+    function test_GetMinCollateral() public {
         uint256 expiry = block.timestamp + 1 days;
         uint256 depositAmount = 3000 * 1e6;
 

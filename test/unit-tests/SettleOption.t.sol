@@ -42,13 +42,13 @@ contract Settle_CoveredCall_Test is FullMarginFixture {
         vm.warp(expiry);
     }
 
-    function testShouldRevertIfPriceIsNotFinalized() public {
+    function test_RevertWhen_PriceIsNotFinalized() public {
         oracle.setExpiryPriceWithFinality(address(weth), address(usdc), strike, false);
         vm.expectRevert(GP_PriceNotFinalized.selector);
         grappa.settleOption(alice, tokenId, amount);
     }
 
-    function testShouldGetNothingIfExpiresOTM() public {
+    function test_GetNothing_OTM() public {
         // expires out the money
         oracle.setExpiryPrice(address(weth), address(usdc), strike - 1);
 
@@ -64,7 +64,7 @@ contract Settle_CoveredCall_Test is FullMarginFixture {
         assertEq(optionBefore, optionAfter + amount);
     }
 
-    function testShouldGetPayoutIfExpiresIMT() public {
+    function test_GetPayout_IMT() public {
         // expires in the money
         uint256 expiryPrice = 5000 * UNIT;
         oracle.setExpiryPrice(address(weth), address(usdc), expiryPrice);
@@ -82,8 +82,7 @@ contract Settle_CoveredCall_Test is FullMarginFixture {
     }
 
     // settlement for sell side
-
-    function testSellerCanClearDebtIfExpiresOTM() public {
+    function test_SellerClearDebt_OTM() public {
         // expires out the money
         oracle.setExpiryPrice(address(weth), address(usdc), strike - 1);
 
@@ -104,7 +103,7 @@ contract Settle_CoveredCall_Test is FullMarginFixture {
         assertEq(collateralIdAfter, collateralIdBefore);
     }
 
-    function testSellerCollateralIsReducedIfExpiresITM() public {
+    function test_SellerCollateralIsReduced_ITM() public {
         // expires out the money
         uint256 expiryPrice = 5000 * UNIT;
         oracle.setExpiryPrice(address(weth), address(usdc), expiryPrice);
@@ -163,7 +162,7 @@ contract Settle_Put_Test is FullMarginFixture {
         vm.warp(expiry);
     }
 
-    function testShouldGetNothingIfExpiresOTM() public {
+    function test_GetNothing_OTM() public {
         // expires out the money
         oracle.setExpiryPrice(address(weth), address(usdc), strike + 1);
         uint256 usdcBefore = usdc.balanceOf(alice);
@@ -178,7 +177,7 @@ contract Settle_Put_Test is FullMarginFixture {
         assertEq(optionBefore, optionAfter + amount);
     }
 
-    function testShouldGetPayoutIfExpiresIMT() public {
+    function test_GetPayout_ITM() public {
         // expires in the money
         uint256 expiryPrice = 1000 * UNIT;
         oracle.setExpiryPrice(address(weth), address(usdc), expiryPrice);
@@ -198,7 +197,7 @@ contract Settle_Put_Test is FullMarginFixture {
 
     // settlement on sell side
 
-    function testSellerCanClearDebtIfExpiresOTM() public {
+    function test_SellerCanClearDebt_OTM() public {
         // expires out the money
         oracle.setExpiryPrice(address(weth), address(usdc), strike + 1);
 
@@ -219,7 +218,7 @@ contract Settle_Put_Test is FullMarginFixture {
         assertEq(collateralIdAfter, collateralIdBefore);
     }
 
-    function testSellerCollateralIsReducedIfExpiresITM() public {
+    function test_SellerCollateralIsReduced_ITM() public {
         // expires out the money
         uint256 expiryPrice = 1000 * UNIT;
         oracle.setExpiryPrice(address(weth), address(usdc), expiryPrice);
@@ -281,7 +280,7 @@ contract Settle_CallSpread_Test is FullMarginFixture {
         vm.warp(expiry);
     }
 
-    function testShouldGetNothingIfExpiresOTM() public {
+    function test_GetNothing_OTM() public {
         // expires out the money
         oracle.setExpiryPrice(address(weth), address(usdc), longStrike);
         uint256 wethBefore = weth.balanceOf(alice);
@@ -296,7 +295,7 @@ contract Settle_CallSpread_Test is FullMarginFixture {
         assertEq(optionBefore, optionAfter + amount);
     }
 
-    function testShouldGetPayoutDifferenceBetweenSpotAndLongStrike() public {
+    function test_GetPayoutDifferenceBetweenSpotAndLongStrike_ITM() public {
         // expires in the money, not higher than upper bond
         uint256 expiryPrice = 4100 * UNIT;
         oracle.setExpiryPrice(address(weth), address(usdc), expiryPrice);
@@ -314,7 +313,7 @@ contract Settle_CallSpread_Test is FullMarginFixture {
         assertEq(optionBefore, optionAfter + amount);
     }
 
-    function testPayoutShouldBeCappedAtShortStrike() public {
+    function test_PayoutShouldBeCappedAtShortStrike_ITM() public {
         // expires in the money, higher than upper bond
         uint256 expiryPrice = 5200 * UNIT;
         oracle.setExpiryPrice(address(weth), address(usdc), expiryPrice);
@@ -332,7 +331,7 @@ contract Settle_CallSpread_Test is FullMarginFixture {
         assertEq(optionBefore, optionAfter + amount);
     }
 
-    function testSellerCanClearDebtIfExpiresOTM() public {
+    function test_SellerCanClearDebt_OTM() public {
         // expires out the money
         oracle.setExpiryPrice(address(weth), address(usdc), longStrike);
 
@@ -353,7 +352,7 @@ contract Settle_CallSpread_Test is FullMarginFixture {
         assertEq(collateralIdAfter, collateralIdBefore);
     }
 
-    function testSellerCollateralIsReducedIfExpiresITM() public {
+    function test_SellerCollateralIsReduced_IfITM() public {
         // expires out the money
         uint256 expiryPrice = 4100 * UNIT;
         oracle.setExpiryPrice(address(weth), address(usdc), expiryPrice);
@@ -417,7 +416,7 @@ contract Settle_CreditCallSpread_Test is FullMarginFixture {
         vm.warp(expiry);
     }
 
-    function testShouldGetNothingIfExpiresOTM() public {
+    function test_GetNothing_OTM() public {
         // expires out the money
         oracle.setExpiryPrice(address(weth), address(usdc), longStrike);
         uint256 usdcBefore = usdc.balanceOf(alice);
@@ -432,7 +431,7 @@ contract Settle_CreditCallSpread_Test is FullMarginFixture {
         assertEq(optionBefore, optionAfter + amount);
     }
 
-    function testShouldGetPayoutDifferenceBetweenSpotAndLongStrike() public {
+    function test_GetPayoutDiffBetweenSpotAndLongStrike_ITM() public {
         // expires in the money, not higher than upper bond
         uint256 expiryPrice = 4100 * UNIT;
         oracle.setExpiryPrice(address(weth), address(usdc), expiryPrice);
@@ -450,7 +449,7 @@ contract Settle_CreditCallSpread_Test is FullMarginFixture {
         assertEq(optionBefore, optionAfter + amount);
     }
 
-    function testPayoutShouldBeCappedAtShortStrike() public {
+    function test_PayoutShouldBeCappedAtShortStrike_ITM() public {
         // expires in the money, higher than upper bond
         uint256 expiryPrice = 5200 * UNIT;
         oracle.setExpiryPrice(address(weth), address(usdc), expiryPrice);
@@ -468,7 +467,7 @@ contract Settle_CreditCallSpread_Test is FullMarginFixture {
         assertEq(optionBefore, optionAfter + amount);
     }
 
-    function testSellerCollateralIsReducedIfExpiresITM() public {
+    function test_SellerCollateralIsReduced_ITM() public {
         // expires out the money
         uint256 expiryPrice = 4100 * UNIT;
         oracle.setExpiryPrice(address(weth), address(usdc), expiryPrice);
@@ -528,7 +527,7 @@ contract Settle_DebitCallSpread_Test is FullMarginFixture {
         vm.warp(expiry);
     }
 
-    function testSellerSettleShortITM() public {
+    function test_SellerSettleShort_ITM() public {
         // expires in the money
         uint256 expiryPrice = 4100 * UNIT;
         oracle.setExpiryPrice(address(weth), address(usdc), expiryPrice);
@@ -552,7 +551,7 @@ contract Settle_DebitCallSpread_Test is FullMarginFixture {
         assertEq(collateralIdAfter, collateralIdBefore);
     }
 
-    function testSellerSettlePayoutCapped() public {
+    function test_SellerSettlePayoutCapped_ITM() public {
         // both 4000 and 5000 calls are ITM
         uint256 expiryPrice = 6000 * UNIT;
         oracle.setExpiryPrice(address(weth), address(usdc), expiryPrice);
@@ -612,7 +611,7 @@ contract Settle_DebitPutSpread_Test is FullMarginFixture {
         vm.warp(expiry);
     }
 
-    function testSellerSettleShortITM() public {
+    function test_SellerSettleShort_ITM() public {
         // expires in the money
         uint256 expiryPrice = 1800 * UNIT;
         oracle.setExpiryPrice(address(weth), address(usdc), expiryPrice);
@@ -636,7 +635,7 @@ contract Settle_DebitPutSpread_Test is FullMarginFixture {
         assertEq(collateralIdAfter, collateralIdBefore);
     }
 
-    function testSellerSettlePayoutCapped() public {
+    function test_SellerSettlePayoutCapped_ITM() public {
         // both 2000 and 1500 puts are ITM
         uint256 expiryPrice = 1400 * UNIT;
         oracle.setExpiryPrice(address(weth), address(usdc), expiryPrice);
@@ -699,7 +698,7 @@ contract Settle_PutSpread_Test is FullMarginFixture {
         vm.warp(expiry);
     }
 
-    function testShouldGetNothingIfExpiresOTM() public {
+    function test_GetNothing_OTM() public {
         // expires out the money
         oracle.setExpiryPrice(address(weth), address(usdc), longStrike);
         uint256 usdcBefore = usdc.balanceOf(alice);
@@ -714,7 +713,7 @@ contract Settle_PutSpread_Test is FullMarginFixture {
         assertEq(optionBefore, optionAfter + amount);
     }
 
-    function testShouldGetPayoutDifferenceBetweenSpotAndLongStrike() public {
+    function test_ShouldGetPayoutDifferenceBetweenSpotAndLongStrike_ITM() public {
         // expires in the money, not lower than lower bond
         uint256 expiryPrice = 1900 * UNIT;
         oracle.setExpiryPrice(address(weth), address(usdc), expiryPrice);
@@ -732,7 +731,7 @@ contract Settle_PutSpread_Test is FullMarginFixture {
         assertEq(optionBefore, optionAfter + amount);
     }
 
-    function testPayoutShouldBeCappedAtShortStrike() public {
+    function test_PayoutShouldBeCappedAtShortStrike_ITM() public {
         // expires in the money, lower than lower bond
         uint256 expiryPrice = 1000 * UNIT;
         oracle.setExpiryPrice(address(weth), address(usdc), expiryPrice);
@@ -751,7 +750,7 @@ contract Settle_PutSpread_Test is FullMarginFixture {
     }
 
     // settling sell side
-    function testSellerCanClearDebtIfExpiresOTM() public {
+    function test_SellerCanClearDebt_OTM() public {
         // expires out the money
         oracle.setExpiryPrice(address(weth), address(usdc), longStrike);
 
@@ -772,7 +771,7 @@ contract Settle_PutSpread_Test is FullMarginFixture {
         assertEq(collateralIdAfter, collateralIdBefore);
     }
 
-    function testSellerCollateralIsReducedIfExpiresITM() public {
+    function test_SellerCollateralIsReduced_ITM() public {
         // expires out the money
 
         uint256 expiryPrice = 1900 * UNIT;

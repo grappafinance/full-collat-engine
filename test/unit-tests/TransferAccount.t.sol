@@ -38,7 +38,7 @@ contract TransferAccount_Test is FullMarginFixture {
         assertEq(newAccCollat, depositAmount);
     }
 
-    function test_CannotOverride_NonEmpty() public {
+    function test_RevertWhen_RecipientNonEmpty() public {
         // another use create their own account
         vm.startPrank(alice);
         usdc.approve(address(engine), type(uint256).max);
@@ -52,7 +52,7 @@ contract TransferAccount_Test is FullMarginFixture {
         engine.transferAccount(address(this), alice);
     }
 
-    function test_CannotStealAccount() public {
+    function test_RevertWhen_CallerNoAccess() public {
         vm.prank(alice);
         vm.expectRevert(FM_NoAccess.selector);
         engine.transferAccount(address(this), alice);

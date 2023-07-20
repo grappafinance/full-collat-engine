@@ -38,7 +38,7 @@ contract BurnOption_Action_Test is FullMarginFixture {
         engine.execute(address(this), actions);
     }
 
-    function testBurn() public {
+    function test_Burn() public {
         // build burn account
         ActionArgs[] memory actions = new ActionArgs[](1);
         actions[0] = createBurnAction(tokenId, address(this), amount);
@@ -53,7 +53,7 @@ contract BurnOption_Action_Test is FullMarginFixture {
         assertEq(option.balanceOf(address(this), tokenId), 0);
     }
 
-    function testCannotBurnWithWrongTokenId() public {
+    function test_CannotBurnWithWrongTokenId() public {
         address subAccount = address(uint160(address(this)) - 1);
 
         // badId: usdc Id

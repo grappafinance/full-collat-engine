@@ -30,7 +30,7 @@ contract RemoveCollateral_Action_Test is FullMarginFixture {
         engine.execute(address(this), actions);
     }
 
-    function testRemoveCollateralChangeStorage() public {
+    function test_RemoveCollateral_ChangeStorage() public {
         ActionArgs[] memory actions = new ActionArgs[](1);
         actions[0] = createRemoveCollateralAction(depositAmount, usdcId, address(this));
         engine.execute(address(this), actions);
@@ -40,7 +40,7 @@ contract RemoveCollateral_Action_Test is FullMarginFixture {
         assertEq(_collateralAmount, 0);
     }
 
-    function testRemoveCollateralMoveBalance() public {
+    function test_RemoveCollateral_MoveBalance() public {
         uint256 engineBalanceBefore = usdc.balanceOf(address(engine));
         uint256 myBalanceBefore = usdc.balanceOf(address(this));
 
@@ -55,7 +55,7 @@ contract RemoveCollateral_Action_Test is FullMarginFixture {
         assertEq(engineBalanceBefore - engineBalanceAfter, depositAmount);
     }
 
-    function testCannotRemoveDifferentCollateral() public {
+    function test_Cannot_RemoveDifferentCollateral() public {
         ActionArgs[] memory actions = new ActionArgs[](1);
         actions[0] = createRemoveCollateralAction(depositAmount, wethId, address(this));
 
@@ -63,7 +63,7 @@ contract RemoveCollateral_Action_Test is FullMarginFixture {
         engine.execute(address(this), actions);
     }
 
-    function testCannotRemoveMoreThanOwn() public {
+    function test_Cannot_RemoveMoreThanOwn() public {
         ActionArgs[] memory actions = new ActionArgs[](1);
         actions[0] = createRemoveCollateralAction(depositAmount + 1, usdcId, address(this));
 
@@ -71,7 +71,7 @@ contract RemoveCollateral_Action_Test is FullMarginFixture {
         engine.execute(address(this), actions);
     }
 
-    function testCannotRemoveCollateralBeforeSettleExpiredShort() public {
+    function test_Cannot_RemoveCollateral_BeforeSettleExpiredShort() public {
         // add short into the vault
         uint256 expiry = block.timestamp + 2 hours;
         uint256 strike = 2500 * UNIT;
@@ -103,7 +103,7 @@ contract RemoveCollateral_Action_Test is FullMarginFixture {
         engine.execute(address(this), actions2);
     }
 
-    function testCannotRemoveMoreCollateralThanPayoutAfterExpiry() public {
+    function test_Cannot_RemoveMoreCollateralThanPayoutAfterExpiry() public {
         // add short into the vault
         uint256 expiry = block.timestamp + 2 hours;
         uint256 strike = 2500 * UNIT;
