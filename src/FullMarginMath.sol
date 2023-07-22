@@ -7,7 +7,8 @@ import {NumberUtil} from "grappa-core/libraries/NumberUtil.sol";
 import {UNIT, UNIT_DECIMALS} from "grappa-core/config/constants.sol";
 
 // Full margin types
-import "./types.sol";
+import {TokenType} from "grappa-core/config/types.sol";
+import {FullMarginDetail} from "./types.sol";
 import {FM_UnsupportedTokenType} from "./errors.sol";
 
 /**

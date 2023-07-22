@@ -67,7 +67,7 @@ contract FullMarginEngine is DebitSpread, IMarginEngine, ReentrancyGuard {
      * @notice This function serves as the main entry point for executing a batch of instructions for an sub-account.
      * @dev Margin requirement check for an sub-account is only performed once, at the end.
      */
-    function execute(address _subAccount, ActionArgs[] calldata actions) public override nonReentrant {
+    function execute(address _subAccount, ActionArgs[] calldata actions) external override nonReentrant {
         _assertCallerHasAccess(_subAccount);
 
         // update the account state and do external calls on the flight

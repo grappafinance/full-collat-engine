@@ -6,7 +6,7 @@ import "grappa-core/libraries/TokenIdUtil.sol";
 import "grappa-core/libraries/ProductIdUtil.sol";
 
 // Full margin types
-import "./types.sol";
+import {FullMarginAccount, FullMarginDetail} from "./types.sol";
 import "./errors.sol";
 
 /**
