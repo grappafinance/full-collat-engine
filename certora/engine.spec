@@ -1,28 +1,42 @@
 /** 
- * declare methods used in this spec
+ * methods used in this spec
  */
 methods {
-  function FullMarginEngine.getMinCollateral(address) external returns(uint) envfree; 
+  function getMinCollateral(address) external returns(uint) envfree; 
 
-  function FullMarginEngine.marginAccounts(address) external returns(uint256, uint64, uint8, uint80) envfree;
+  function marginAccounts(address) external returns(uint256, uint64, uint8, uint80) envfree;
 
-  // function FullMarginEngine.payCashValue(address, address, uint256) external;
+  function onERC1155BatchReceived(address,address,uint256[],uint256[],bytes) external returns (bytes4) envfree;
+
+  function onERC1155Received(address,address,uint256,uint256,bytes) external returns (bytes4) envfree;
+
+  function grappa() external returns (address) envfree;
+
+  function optionToken() external returns (address) envfree;
+
+  function allowedExecutionLeft(uint160,address) external returns (uint) envfree;
 }
 
-// testing arbitrary docs
-// this should not pass: counter example is using transferAccount
-rule stateChangeOnlyExecuteFunction(method f, address acc) {
-    env e; calldataarg args;
-    // Fetch min collateral before a call
-    uint256 minCollat = getMinCollateral(acc); 
-    
-    // arbitrary calls
-    f(e,args);
-    
-    // Fetch min collateral after
-    uint256 minCollat_ = getMinCollateral(acc); 
-    
-    assert minCollat != minCollat_ => 
-        f.selector == sig:execute(address,FullMarginEngine.ActionArgs[]).selector, 
-        "single point of execution not preserved!";   
+/**
+ * helper functions to get properties of margin accounts
+ */
+function getAccountShortAmount(address acc) returns uint64 {
+    uint64 shortAmount; 
+    _, shortAmount, _, _ = marginAccounts(acc); 
+    return shortAmount;
+}
+
+function getAccountShortToken(address acc) returns uint256 {
+    uint256 tokenId;
+    tokenId, _, _, _ = marginAccounts(acc); 
+    return tokenId;
+}
+
+// if short token id is 0 (no short), then short amount MUST be 0
+invariant account_no_unknown_debt(env e, address acc) (getAccountShortToken(acc) == 0) => (getAccountShortAmount(acc) == 0) {
+
+    // while evaluating method transferAccount, assume that the {from} account satisfy this rule!
+    preserved transferAccount(address from, address to) with (env e2) {
+        require (getAccountShortToken(from) == 0) => (getAccountShortAmount(from) == 0);
+    }
 }

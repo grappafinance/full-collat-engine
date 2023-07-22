@@ -10,7 +10,7 @@
 2. get min collateral <= account.collateral for all accounts
 3. transferAccount doesn't affect the total collateral requirement
 
-## Data structure
+## Invariants: Data structure
 
 1. if account.shortAmount == 0, account.tokenId == 0
 2. if account.tokenId != 0, collateralId parsed from token id must == account.collateralId
