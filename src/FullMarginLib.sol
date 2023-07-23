@@ -33,6 +33,14 @@ library FullMarginLib {
      * @param account FullMarginAccount storage that will be updated
      */
     function addCollateral(FullMarginAccount storage account, uint8 collateralId, uint80 amount) internal {
+        // this line should not be allowed to executed because collateralId == 0 will invoke 
+        // calling safeTransferFrom on address(0). But still guarding here to be safe
+        if (collateralId == 0) revert FM_WrongCollateralId();
+        
+        // if there is any existing short position, the collateralId must match the short position
+        uint tokenId = account.tokenId;
+        if (tokenId != 0 && tokenId.parseCollateralId() != collateralId) revert FM_CollateralMisMatch();
+
         uint80 cacheId = account.collateralId;
         if (cacheId == 0) {
             account.collateralId = collateralId;

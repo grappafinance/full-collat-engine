@@ -24,6 +24,8 @@ contract MergeOption_Action_Test is FullMarginFixture {
         FullMarginFixture.setUp();
         weth.mint(address(this), depositAmount);
         weth.approve(address(engine), type(uint256).max);
+        usdc.mint(address(this), 1000_000 * 1e6);
+        usdc.approve(address(engine), type(uint256).max);
 
         expiry = block.timestamp + 14 days;
 
@@ -114,6 +116,23 @@ contract MergeOption_Action_Test is FullMarginFixture {
         engine.execute(address(this), actions);
 
         //action should not revert
+    }
+
+    function test_RevertWhen_MergeIntoCreditSpread_ChangeCollatType() public {
+        // test an attack will revert: convert to debit spread => remove collateral => add different collateral
+        uint256 lowerStrike = 3800 * UNIT;
+        uint256 newTokenId = getTokenId(TokenType.CALL, pidEthCollat, expiry, lowerStrike, 0);
+        mintOptionFor(address(this), newTokenId, pidEthCollat, amount);
+
+        ActionArgs[] memory actions = new ActionArgs[](3);
+        actions[0] = createMergeAction(newTokenId, existingTokenId, address(this), amount);
+        actions[1] = createRemoveCollateralAction(depositAmount, wethId, address(this));
+        // change to a different collateral asset (USDC)
+        actions[2] = createAddCollateralAction(usdcId, address(this), 100 * 1e6);
+
+        vm.expectRevert(FM_CollateralMisMatch.selector);
+        engine.execute(address(this), actions);
+
     }
 
     function test_MergeIntoDebitSpread_RemoveAllCollateral() public {
