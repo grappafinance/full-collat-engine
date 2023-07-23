@@ -54,7 +54,7 @@ contract MergeOption_Action_Test is FullMarginFixture {
 
         // check result
         (uint256 shortId,,,) = engine.marginAccounts(address(this));
-        uint expectedTokenId = getTokenId(TokenType.CALL_SPREAD, pidEthCollat, expiry, strikePrice, higherStrike);
+        uint256 expectedTokenId = getTokenId(TokenType.CALL_SPREAD, pidEthCollat, expiry, strikePrice, higherStrike);
         assertEq(shortId, expectedTokenId);
     }
 
