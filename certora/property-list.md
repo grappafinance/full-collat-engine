@@ -9,8 +9,9 @@
 1. sum of all Grappa.getPayout() <= total asset 
 2. get min collateral <= account.collateral for all accounts
 3. transferAccount doesn't affect the total collateral requirement
+4. cannot mint call or put with no collateral (rounding)
 
 ## Invariants: Data structure
 
-1. if account.shortAmount == 0, account.tokenId == 0
-2. if account.tokenId != 0, collateralId parsed from token id must == account.collateralId
+1. if account.shortAmount != 0, account.tokenId must not be 0. (no hanging debt with no ID)
+2. if account.collateralAmount != 0, collateralId must not be 0. (no hanging collateral)
