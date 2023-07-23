@@ -73,7 +73,11 @@ function collateralIdFromTokenMatch(address acc) returns bool {
     uint256 shortId; uint64 shortAmount; uint256 collatId; uint80 collatAmount;
     shortId, shortAmount, collatId, collatAmount = marginAccounts(acc);
 
-    return (shortId != 0 && collatId != 0) => getCollatIdFromTokenId(shortId) == collatId;
+    // assume we have a valid shortId (non 0)
+    require getCollatIdFromTokenId(shortId) != 0;
+
+    // testing: whenever there's short, collateral id must be non 0 && matched
+    return (shortId != 0) => (collatId != 0 && getCollatIdFromTokenId(shortId) == collatId);
 }
 
 function accountWellCollateralized(address acc) returns bool {
@@ -114,14 +118,13 @@ invariant account_no_unknown_collateral(env e, address acc) noCollatAmountWithou
 // if an account has collat Id and short token id, collateral id derived from tokenId must equal collatId
 invariant account_collateral_match(env e, address acc) collateralIdFromTokenMatch(acc) {
 
-    // todo: reserach better method than reverting collatId == 0 in code.
-    
     // while evaluating method transferAccount, assume that the {from} account already satisfy this rule!
     preserved transferAccount(address from, address to) with (env e2) {
         require collateralIdFromTokenMatch(from);
     }
     
-    // make sure the starting with empty account
+    // make sure we starting with empty account, no bad shortId can exist
+    // todo: use grappa.checkTokenId instead of this assumption?
     preserved { 
       require(accountIsEmpty(acc));
     }

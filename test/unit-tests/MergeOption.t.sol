@@ -54,12 +54,8 @@ contract MergeOption_Action_Test is FullMarginFixture {
 
         // check result
         (uint256 shortId,,,) = engine.marginAccounts(address(this));
-        (TokenType newType,,, uint64 longStrike, uint64 shortStrike) = parseTokenId(shortId);
-
-        assertEq(uint8(newType), uint8(TokenType.CALL_SPREAD));
-        assertTrue(shortId != newTokenId);
-        assertEq(longStrike, strikePrice);
-        assertEq(shortStrike, higherStrike);
+        uint expectedTokenId = getTokenId(TokenType.CALL_SPREAD, pidEthCollat, expiry, strikePrice, higherStrike);
+        assertEq(shortId, expectedTokenId);
     }
 
     function test_Cannot_MergeByAddingSpread() public {

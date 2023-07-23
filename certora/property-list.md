@@ -13,5 +13,6 @@
 
 ## Invariants: Data structure
 
-1. if account.shortAmount != 0, account.tokenId must not be 0. (no hanging debt with no ID)
-2. if account.collateralAmount != 0, collateralId must not be 0. (no hanging collateral)
+- [x] 1. if account.shortAmount != 0, account.tokenId must not be 0. (no hanging debt with no ID)
+- [x] 2. if account.collateralAmount != 0, collateralId must not be 0. (no hanging collateral)
+- [x] 3. 
