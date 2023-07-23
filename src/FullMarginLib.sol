@@ -37,10 +37,6 @@ library FullMarginLib {
         // calling safeTransferFrom on address(0). But still guarding here to be safe
         if (collateralId == 0) revert FM_WrongCollateralId();
 
-        // if there is any existing short position, the collateralId must match the short position
-        uint256 tokenId = account.tokenId;
-        if (tokenId != 0 && tokenId.parseCollateralId() != collateralId) revert FM_CollateralMisMatch();
-
         uint80 cacheId = account.collateralId;
         if (cacheId == 0) {
             account.collateralId = collateralId;
@@ -59,7 +55,10 @@ library FullMarginLib {
 
         uint80 newAmount = account.collateralAmount - amount;
         account.collateralAmount = newAmount;
-        if (newAmount == 0) {
+
+        // only reset the collateralId if the collateral amount is 0 and there is no short position
+        // if tokenId is non-empty, we keep collatId here so mismatched collateral cannot be added
+        if (newAmount == 0 && account.tokenId == 0) {
             account.collateralId = 0;
         }
     }

@@ -87,7 +87,7 @@ contract MintOption_Action_Test is FullMarginFixture {
         actions2[0] = createMintAction(tokenId, address(this), amount);
         actions2[1] = createAddCollateralAction(usdcId, address(this), depositAmount);
 
-        vm.expectRevert(FM_CollateralMisMatch.selector);
+        vm.expectRevert(FM_WrongCollateralId.selector);
         engine.execute(address(this), actions2);
     }
 

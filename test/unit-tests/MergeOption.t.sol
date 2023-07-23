@@ -130,7 +130,7 @@ contract MergeOption_Action_Test is FullMarginFixture {
         // change to a different collateral asset (USDC)
         actions[2] = createAddCollateralAction(usdcId, address(this), 100 * 1e6);
 
-        vm.expectRevert(FM_CollateralMisMatch.selector);
+        vm.expectRevert(FM_WrongCollateralId.selector);
         engine.execute(address(this), actions);
     }
 
