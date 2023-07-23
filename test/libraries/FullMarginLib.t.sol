@@ -91,7 +91,7 @@ contract FullMarginLibTest is Test {
     }
 
     function test_RevertWhen_AddZeroId() public {
-        vm.expectRevert(FM_WrongCollateralId.selector);    
+        vm.expectRevert(FM_WrongCollateralId.selector);
         tester.addCollateral(0, 100);
     }
 
@@ -270,7 +270,7 @@ contract FullMarginLibTest is Test {
         uint8 collateralId = 2;
         uint40 productId = ProductIdUtil.getProductId(0, 0, underlyingId, strikeId, collateralId);
         uint256 tokenId = TokenIdUtil.getTokenId(TokenType.CALL, productId, expiry, 100, 0);
-        
+
         tester.mintOption(tokenId, 100);
         tester.addCollateral(collateralId, 1000);
 

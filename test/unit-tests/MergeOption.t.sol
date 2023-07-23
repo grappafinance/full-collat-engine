@@ -132,7 +132,6 @@ contract MergeOption_Action_Test is FullMarginFixture {
 
         vm.expectRevert(FM_CollateralMisMatch.selector);
         engine.execute(address(this), actions);
-
     }
 
     function test_MergeIntoDebitSpread_RemoveAllCollateral() public {

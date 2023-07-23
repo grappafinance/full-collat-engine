@@ -71,7 +71,7 @@ contract AddCollateral_Action_Test is FullMarginFixture {
     function test_RevertWhen_AddZeroCollateralId() public {
         ActionArgs[] memory actions = new ActionArgs[](1);
         actions[0] = createAddCollateralAction(0, address(this), 0);
-        
+
         vm.expectRevert(FM_WrongCollateralId.selector);
         engine.execute(address(this), actions);
     }
