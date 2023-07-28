@@ -52,6 +52,16 @@ function getCollatIdFromTokenId(uint256 tokenId) returns uint256 {
     return (tokenId >> (192)) & uint8Mask;
 }
 
+function accountIsEmpty(address acc) returns bool {
+    uint256 shortId; uint64 shortAmount; uint256 collatId; uint80 collatAmount;
+    shortId, shortAmount, collatId, collatAmount = marginAccounts(acc);
+    return shortAmount == 0 && collatAmount == 0 && shortId == 0 && collatId == 0;
+}
+
+/* ======================================= *
+ *          Property functions
+ * ======================================= */
+
 // if there is short amount, there must be short id
 function noShortAmountWithoutShortId(address acc) returns bool {
     uint256 shortAmount = getAccountShortAmount(acc);
@@ -86,11 +96,6 @@ function accountWellCollateralized(address acc) returns bool {
     return collateralDeposited >= collateralRequied;
 }
 
-function accountIsEmpty(address acc) returns bool {
-    uint256 shortId; uint64 shortAmount; uint256 collatId; uint80 collatAmount;
-    shortId, shortAmount, collatId, collatAmount = marginAccounts(acc);
-    return shortAmount == 0 && collatAmount == 0 && shortId == 0 && collatId == 0;
-}
 
 /* ======================================= *
  *               Invariants
