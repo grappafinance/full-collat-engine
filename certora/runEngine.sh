@@ -5,5 +5,3 @@ certoraRun src/FullMarginEngine.sol:FullMarginEngine \
     --packages  solmate=lib/solmate/src \
                 openzeppelin=lib/openzeppelin-contracts/contracts \
                 grappa-core/=lib/core-cash/src
-    #            openzeppelin-upgradeable=lib/core-cash/lib/openzeppelin-contracts-upgradeable/contracts
-    # --link FullMarginEngine:grappa=Grappa \
