@@ -3,14 +3,13 @@ pragma solidity ^0.8.0;
 
 import {TokenIdUtil} from "grappa-core/libraries/TokenIdUtil.sol";
 import {ProductIdUtil} from "grappa-core/libraries/ProductIdUtil.sol";
-import "grappa-core/config/constants.sol";
 import "grappa-core/config/errors.sol";
 
 import {Test, stdError} from "forge-std/Test.sol";
 
 import {FullMarginLib} from "src/FullMarginLib.sol";
 
-import "src/types.sol";
+import {FullMarginAccount, TokenType} from "src/types.sol";
 import "src/errors.sol";
 
 /**
@@ -69,12 +68,12 @@ contract FullMarginLibTest is Test {
         tester = new FullMarginLibTester();
     }
 
-    function testIsEmpty() public {
+    function test_IsEmpty() public {
         bool isEmpty = tester.isEmpty();
         assertEq(isEmpty, true);
     }
 
-    function testAddCollateral() public {
+    function test_AddCollateral() public {
         uint8 collatId = 1;
         tester.addCollateral(collatId, 100);
         FullMarginAccount memory acc = tester.account();
@@ -91,7 +90,7 @@ contract FullMarginLibTest is Test {
         tester.addCollateral(collatId + 1, 100);
     }
 
-    function testCanAddZeroId() public {
+    function test_AddZeroId() public {
         // the storage library won't revert if 0 is specified
         // Engine contract needs to make sure collateral id cannot be 0
         tester.addCollateral(0, 100);
@@ -100,7 +99,7 @@ contract FullMarginLibTest is Test {
         assertEq(acc.collateralAmount, 100);
     }
 
-    function testReduceCollateral() public {
+    function test_ReduceCollateral() public {
         uint80 collatAmount = 100;
         uint8 collatId = 1;
         tester.addCollateral(collatId, collatAmount);
@@ -115,7 +114,7 @@ contract FullMarginLibTest is Test {
         assertEq(acc.collateralId, collatId);
         assertEq(acc.collateralAmount, collatAmount / 2);
 
-        // cannot remove more then the acconut holds
+        // cannot remove more then the account holds
         vm.expectRevert(stdError.arithmeticError);
         tester.removeCollateral(collatId, acc.collateralAmount + 1);
 
@@ -126,7 +125,7 @@ contract FullMarginLibTest is Test {
         assertEq(acc.collateralAmount, 0);
     }
 
-    function testMintShortInEmptyAccount() public {
+    function test_MintShortInEmptyAccount() public {
         uint64 expiry = uint64(block.timestamp) + 100;
         uint8 strikeId = 1;
         uint8 underlyingId = 2;
@@ -151,7 +150,7 @@ contract FullMarginLibTest is Test {
         tester.mintOption(id + 1, 100);
     }
 
-    function testCannotMintOptionWithDiffCollatType() public {
+    function test_CannotMintOptionWithDiffCollatType() public {
         // assume there's already collat in the account
         uint8 collateralId = 1;
         tester.addCollateral(collateralId, 100);
@@ -159,7 +158,7 @@ contract FullMarginLibTest is Test {
         uint64 expiry = uint64(block.timestamp) + 100;
         uint8 strikeId = 1;
         uint8 underlyingId = 2;
-        // product id with collateral id == underlying id (for call)
+        // product id with collateral id = underlying id (for call)
         uint40 productId = ProductIdUtil.getProductId(0, 0, underlyingId, strikeId, underlyingId);
         uint256 id = TokenIdUtil.getTokenId(TokenType.CALL, productId, expiry, 100, 0);
 
@@ -168,7 +167,7 @@ contract FullMarginLibTest is Test {
         tester.mintOption(id, 100);
     }
 
-    function testCannotMintOptionWithBadCollatType() public {
+    function test_CannotMintOptionWithBadCollatType() public {
         uint64 expiry = uint64(block.timestamp) + 100;
         uint8 strikeId = 1;
         uint8 underlyingId = 2;
@@ -191,7 +190,7 @@ contract FullMarginLibTest is Test {
         tester.mintOption(callSpread, 100);
     }
 
-    function testBurnOption() public {
+    function test_BurnOption() public {
         // mint the option
         uint64 expiry = uint64(block.timestamp) + 100;
         uint8 strikeId = 1;
@@ -216,7 +215,7 @@ contract FullMarginLibTest is Test {
         assertEq(acc.shortAmount, 0);
     }
 
-    function testMergeShortId() public {
+    function test_MergeShortId() public {
         // mint the option
         uint64 expiry = uint64(block.timestamp) + 100;
         uint8 strikeId = 1;
@@ -242,7 +241,7 @@ contract FullMarginLibTest is Test {
         assertEq(uint8(t), uint8(TokenType.CALL_SPREAD));
     }
 
-    function testSplitSpreadId() public {
+    function test_SplitSpreadId() public {
         // mint the option
         uint64 expiry = uint64(block.timestamp) + 100;
         uint8 strikeId = 1;
@@ -267,7 +266,7 @@ contract FullMarginLibTest is Test {
         assertEq(uint8(t), uint8(TokenType.CALL)); // call spread became vanilla call
     }
 
-    function testSettle() public {
+    function test_Settle() public {
         // mint the option
         uint256 tokenId = 77777;
         tester.mintOption(tokenId, 100);

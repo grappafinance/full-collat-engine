@@ -12,10 +12,12 @@ import "grappa-core/config/errors.sol";
 import "src/errors.sol";
 
 // solhint-disable-next-line contract-name-camelcase
-contract TestMint_FM is FullMarginFixture {
+contract MintOption_Action_Test is FullMarginFixture {
     uint256 public expiry;
 
-    function setUp() public {
+    function setUp() public override {
+        FullMarginFixture.setUp();
+
         usdc.mint(address(this), 1000_000 * 1e6);
         usdc.approve(address(engine), type(uint256).max);
 
@@ -27,7 +29,7 @@ contract TestMint_FM is FullMarginFixture {
         oracle.setSpotPrice(address(weth), 3000 * UNIT);
     }
 
-    function testMintCall() public {
+    function test_MintCall() public {
         uint256 depositAmount = 1 * 1e18;
 
         uint256 strikePrice = 4000 * UNIT;
@@ -45,7 +47,7 @@ contract TestMint_FM is FullMarginFixture {
         assertEq(shortAmount, amount);
     }
 
-    function testCannotMintCallWithUsdcCollateral() public {
+    function test_RevertWhen_MintCallWithUsdcCollateral() public {
         uint256 depositAmount = 1000 * UNIT;
 
         uint256 strikePrice = 4000 * UNIT;
@@ -61,7 +63,7 @@ contract TestMint_FM is FullMarginFixture {
         engine.execute(address(this), actions);
     }
 
-    function testCannotMintCoveredCallUsingUsdcCollateral() public {
+    function test_RevertWhen_MintCoveredCallUsingUsdcCollateral() public {
         uint256 depositAmount = 1000 * UNIT;
 
         uint256 strikePrice = 4000 * UNIT;
@@ -89,7 +91,7 @@ contract TestMint_FM is FullMarginFixture {
         engine.execute(address(this), actions2);
     }
 
-    function testMintPut() public {
+    function test_MintPut() public {
         uint256 depositAmount = 2000 * 1e6;
 
         uint256 strikePrice = 2000 * UNIT;
@@ -107,7 +109,7 @@ contract TestMint_FM is FullMarginFixture {
         assertEq(shortAmount, amount);
     }
 
-    function testCannotMintExpiredOption() public {
+    function test_RevertWhen_MintExpiredOption() public {
         uint256 strikePrice = 2000 * UNIT;
         uint256 amount = 1 * UNIT;
 
@@ -120,7 +122,7 @@ contract TestMint_FM is FullMarginFixture {
         engine.execute(address(this), actions);
     }
 
-    function testCannotMintPutWithETHCollateral() public {
+    function test_RevertWhen_MintPutWithETHCollateral() public {
         uint256 depositAmount = 1 * 1e18;
 
         uint256 strikePrice = 4000 * UNIT;
@@ -136,7 +138,7 @@ contract TestMint_FM is FullMarginFixture {
         engine.execute(address(this), actions);
     }
 
-    function testMintPutSpread() public {
+    function test_MintPutSpread() public {
         uint256 longStrike = 2800 * UNIT;
         uint256 shortStrike = 2600 * UNIT;
 

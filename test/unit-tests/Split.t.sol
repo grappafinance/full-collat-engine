@@ -11,8 +11,7 @@ import "grappa-core/config/errors.sol";
 
 import "src/errors.sol";
 
-// solhint-disable-next-line contract-name-camelcase
-contract TestSplitCallSpread_FM is FullMarginFixture {
+contract SplitCallSpread_Test is FullMarginFixture {
     uint256 public expiry;
     uint256 public strikePriceLow = 4000 * UNIT;
     uint256 public strikePriceHigh = 5000 * UNIT;
@@ -20,7 +19,8 @@ contract TestSplitCallSpread_FM is FullMarginFixture {
     uint256 public amount = 1 * UNIT;
     uint256 public spreadId;
 
-    function setUp() public {
+    function setUp() public override {
+        FullMarginFixture.setUp();
         weth.mint(address(this), 100 ether);
         weth.approve(address(engine), type(uint256).max);
 
@@ -35,7 +35,7 @@ contract TestSplitCallSpread_FM is FullMarginFixture {
         engine.execute(address(this), actions);
     }
 
-    function testSplitCallSpread() public {
+    function test_SplitCallSpread() public {
         // split
         uint256 amountToAdd = 1 ether - depositAmount;
         ActionArgs[] memory actions = new ActionArgs[](2);
@@ -53,7 +53,7 @@ contract TestSplitCallSpread_FM is FullMarginFixture {
         assertEq(shortStrike, 0);
     }
 
-    function testSplitCallSpreadCreateNewCallToken() public {
+    function test_SplitCallSpread_CreateNewCallToken() public {
         uint256 amountToAdd = 1 ether - depositAmount;
         // split
         ActionArgs[] memory actions = new ActionArgs[](2);
@@ -67,7 +67,7 @@ contract TestSplitCallSpread_FM is FullMarginFixture {
         assertEq(option.balanceOf(address(this), expectedTokenId), amount);
     }
 
-    function testCannotSplitCallSpreadWithoutAddingCollateral() public {
+    function test_RevertWhen_SplitCallSpread_WithoutAddingCollateral() public {
         // only split
         ActionArgs[] memory actions = new ActionArgs[](1);
         actions[0] = createSplitAction(spreadId, amount, address(this));
@@ -77,8 +77,7 @@ contract TestSplitCallSpread_FM is FullMarginFixture {
     }
 }
 
-// solhint-disable-next-line contract-name-camelcase
-contract TestSplitPutSpread_FM is FullMarginFixture {
+contract SplitPutSpread_Test is FullMarginFixture {
     uint256 public expiry;
     uint256 public strikePriceHigh = 2000 * UNIT;
     uint256 public strikePriceLow = 1900 * UNIT;
@@ -86,7 +85,8 @@ contract TestSplitPutSpread_FM is FullMarginFixture {
     uint256 public amount = 1 * UNIT;
     uint256 public spreadId;
 
-    function setUp() public {
+    function setUp() public override {
+        FullMarginFixture.setUp();
         usdc.mint(address(this), 1000_000 * 1e6);
         usdc.approve(address(engine), type(uint256).max);
 
@@ -103,7 +103,7 @@ contract TestSplitPutSpread_FM is FullMarginFixture {
         engine.execute(address(this), actions);
     }
 
-    function testSplitPutSpread() public {
+    function test_SplitPutSpread() public {
         uint256 amountToAdd = strikePriceHigh - depositAmount;
         // split
         ActionArgs[] memory actions = new ActionArgs[](2);
@@ -120,7 +120,7 @@ contract TestSplitPutSpread_FM is FullMarginFixture {
         assertEq(shortStrike, 0);
     }
 
-    function testSplitCallSpreadCreateNewCallToken() public {
+    function test_SplitPutSpread_CreateNewPutToken() public {
         uint256 amountToAdd = strikePriceHigh - depositAmount;
         // split
         ActionArgs[] memory actions = new ActionArgs[](2);
@@ -134,7 +134,7 @@ contract TestSplitPutSpread_FM is FullMarginFixture {
         assertEq(option.balanceOf(address(this), expectedTokenId), amount);
     }
 
-    function testCannotSplitCallSpreadWithoutAddingCollateral() public {
+    function test_RevertWhen_SplitPutSpread_WithoutAddingCollateral() public {
         // only split
         ActionArgs[] memory actions = new ActionArgs[](1);
         actions[0] = createSplitAction(spreadId, amount, address(this));
@@ -143,7 +143,7 @@ contract TestSplitPutSpread_FM is FullMarginFixture {
         engine.execute(address(this), actions);
     }
 
-    function testCannotSplitNonExistingSpreadId() public {
+    function test_RevertWhen_SplitNonExistingSpreadId() public {
         uint256 fakeLongStrike = strikePriceHigh - (50 * UNIT);
         uint256 fakeSpreadId = getTokenId(TokenType.PUT_SPREAD, pidEthCollat, expiry, fakeLongStrike, strikePriceLow);
 
@@ -154,7 +154,7 @@ contract TestSplitPutSpread_FM is FullMarginFixture {
         engine.execute(address(this), actions);
     }
 
-    function testCannotSplitWithWrongAmount() public {
+    function test_RevertWith_SplitWithWrongAmount() public {
         ActionArgs[] memory actions = new ActionArgs[](1);
         actions[0] = createSplitAction(spreadId, amount / 2, address(this));
 

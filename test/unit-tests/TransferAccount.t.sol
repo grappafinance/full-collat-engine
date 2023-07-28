@@ -9,10 +9,11 @@ import "grappa-core/config/errors.sol";
 
 import "src/errors.sol";
 
-contract TransferAccount is FullMarginFixture {
+contract TransferAccount_Test is FullMarginFixture {
     uint256 public depositAmount = 1000 * 1e6;
 
-    function setUp() public {
+    function setUp() public override {
+        FullMarginFixture.setUp();
         usdc.mint(address(this), 1000_000 * 1e6);
         usdc.approve(address(engine), type(uint256).max);
 
@@ -24,7 +25,7 @@ contract TransferAccount is FullMarginFixture {
         engine.execute(address(this), actions);
     }
 
-    function testTransferAccount() public {
+    function test_TransferAccount() public {
         address newAcc = address(uint160(address(this)) - 1);
         engine.transferAccount(address(this), newAcc);
 
@@ -37,7 +38,7 @@ contract TransferAccount is FullMarginFixture {
         assertEq(newAccCollat, depositAmount);
     }
 
-    function testTransferAccountCannotOverride() public {
+    function test_RevertWhen_RecipientNonEmpty() public {
         // another use create their own account
         vm.startPrank(alice);
         usdc.approve(address(engine), type(uint256).max);
@@ -51,7 +52,7 @@ contract TransferAccount is FullMarginFixture {
         engine.transferAccount(address(this), alice);
     }
 
-    function testCannotStealAccount() public {
+    function test_RevertWhen_CallerNoAccess() public {
         vm.prank(alice);
         vm.expectRevert(FM_NoAccess.selector);
         engine.transferAccount(address(this), alice);

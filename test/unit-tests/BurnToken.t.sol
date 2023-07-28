@@ -13,14 +13,15 @@ import "grappa-core/config/errors.sol";
 import "src/errors.sol";
 
 // solhint-disable-next-line contract-name-camelcase
-contract TestBurnOption_FM is FullMarginFixture {
+contract BurnOption_Action_Test is FullMarginFixture {
     uint256 public expiry;
     uint256 public strikePrice = 4000 * UNIT;
     uint256 public depositAmount = 1 ether;
     uint256 public amount = 1 * UNIT;
     uint256 public tokenId;
 
-    function setUp() public {
+    function setUp() public override {
+        FullMarginFixture.setUp();
         weth.mint(address(this), depositAmount);
         weth.approve(address(engine), type(uint256).max);
 
@@ -37,7 +38,7 @@ contract TestBurnOption_FM is FullMarginFixture {
         engine.execute(address(this), actions);
     }
 
-    function testBurn() public {
+    function test_Burn() public {
         // build burn account
         ActionArgs[] memory actions = new ActionArgs[](1);
         actions[0] = createBurnAction(tokenId, address(this), amount);
@@ -52,7 +53,7 @@ contract TestBurnOption_FM is FullMarginFixture {
         assertEq(option.balanceOf(address(this), tokenId), 0);
     }
 
-    function testCannotBurnWithWrongTokenId() public {
+    function test_CannotBurnWithWrongTokenId() public {
         address subAccount = address(uint160(address(this)) - 1);
 
         // badId: usdc Id

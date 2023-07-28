@@ -12,7 +12,7 @@ import "grappa-core/config/errors.sol";
 import "src/errors.sol";
 
 // solhint-disable-next-line contract-name-camelcase
-contract TestMergeOption_FM is FullMarginFixture {
+contract MergeOption_Action_Test is FullMarginFixture {
     uint256 public expiry;
     uint256 public strikePrice = 4000 * UNIT;
     uint256 public depositAmount = 1 ether;
@@ -20,7 +20,8 @@ contract TestMergeOption_FM is FullMarginFixture {
 
     uint256 public existingTokenId;
 
-    function setUp() public {
+    function setUp() public override {
+        FullMarginFixture.setUp();
         weth.mint(address(this), depositAmount);
         weth.approve(address(engine), type(uint256).max);
 
@@ -37,7 +38,7 @@ contract TestMergeOption_FM is FullMarginFixture {
         engine.execute(address(this), actions);
     }
 
-    function testMergeCall() public {
+    function test_MergeCall() public {
         // mint new call option for this address
 
         uint256 higherStrike = 5000 * UNIT;
@@ -59,7 +60,7 @@ contract TestMergeOption_FM is FullMarginFixture {
         assertEq(shortStrike, higherStrike);
     }
 
-    function testCannotMergeByAddingSpread() public {
+    function test_Cannot_MergeByAddingSpread() public {
         uint256 spreadToAdd = getTokenId(TokenType.CALL_SPREAD, pidEthCollat, expiry, strikePrice, strikePrice + 1);
 
         ActionArgs[] memory actions = new ActionArgs[](1);
@@ -69,7 +70,7 @@ contract TestMergeOption_FM is FullMarginFixture {
         engine.execute(address(this), actions);
     }
 
-    function testCannotMergeWithWrongAmount() public {
+    function test_Cannot_MergeWithWrongAmount() public {
         uint256 higherStrike = 5000 * UNIT;
         uint256 newTokenId = getTokenId(TokenType.CALL, pidEthCollat, expiry, higherStrike, 0);
         uint256 wrongAmount = 2 * UNIT;
@@ -83,7 +84,7 @@ contract TestMergeOption_FM is FullMarginFixture {
         engine.execute(address(this), actions);
     }
 
-    function testCannotMergeWithWrongShortId() public {
+    function test_Cannot_MergeWithWrongShortId() public {
         uint256 higherStrike = 5000 * UNIT;
         uint256 newTokenId = getTokenId(TokenType.CALL, pidEthCollat, expiry, higherStrike, 0);
         mintOptionFor(address(this), newTokenId, pidEthCollat, amount);
@@ -98,7 +99,7 @@ contract TestMergeOption_FM is FullMarginFixture {
         engine.execute(address(this), actions);
     }
 
-    function testMergeIntoCreditSpreadCanRemoveCollateral() public {
+    function test_MergeIntoCreditSpread_RemoveCollateral() public {
         // mint new call option for this address
         uint256 higherStrike = 5000 * UNIT;
         uint256 newTokenId = getTokenId(TokenType.CALL, pidEthCollat, expiry, higherStrike, 0);
@@ -115,7 +116,7 @@ contract TestMergeOption_FM is FullMarginFixture {
         //action should not revert
     }
 
-    function testMergeIntoDebitSpreadCanRemoveAllCollateral() public {
+    function test_MergeIntoDebitSpread_RemoveAllCollateral() public {
         // mint new call option for this address
         uint256 lowerStrike = 3800 * UNIT;
         uint256 newTokenId = getTokenId(TokenType.CALL, pidEthCollat, expiry, lowerStrike, 0);
