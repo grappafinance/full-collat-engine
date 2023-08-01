@@ -63,16 +63,4 @@ contract FullMarginEngineGeneralTest is FullMarginFixture {
 
         assertEq(engine.getMinCollateral(address(this)), depositAmount);
     }
-
-    function test_MinCollatStruct() public {
-        uint256 tokenId = 0x2fffffffefe0000000000000001fffffffffffffffe0000000000000000;
-        (TokenType tokenType, uint40 productId, uint64 expiry, uint64 shortStrike, uint64 longStrike) =
-            TokenIdUtil.parseTokenId(tokenId);
-        // log all
-        console2.log("tokenType: %s", uint256(tokenType));
-        console2.log("productId: %s", uint256(productId));
-        console2.log("expiry: %s", uint256(expiry));
-        console2.log("shortStrike: %s", uint256(shortStrike));
-        console2.log("longStrike: %s", uint256(longStrike));
-    }
 }
