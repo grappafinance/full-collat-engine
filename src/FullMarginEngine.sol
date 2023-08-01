@@ -140,7 +140,6 @@ contract FullMarginEngine is DebitSpread, IMarginEngine, ReentrancyGuard {
     }
 
     function _increaseShortInAccount(address _subAccount, uint256 tokenId, uint64 amount) internal override {
-        checkTokenIdToMint(tokenId);
         marginAccounts[_subAccount].mintOption(tokenId, amount);
     }
 
@@ -235,28 +234,6 @@ contract FullMarginEngine is DebitSpread, IMarginEngine, ReentrancyGuard {
      *                     Internal Functions
      * ========================================================= *
      */
-
-    function checkTokenIdToMint(uint256 tokenId) public view {
-        (TokenType optionType, uint40 productId,,,) = tokenId.parseTokenId();
-
-        // assign collateralId or check collateral id is the same
-        (,, uint8 underlyingId, uint8 strikeId, uint8 collateralId) = productId.parseProductId();
-
-        // call can only be collateralized by underlying
-        if ((optionType == TokenType.CALL) && underlyingId != collateralId) {
-            revert FM_CannotMintOptionWithThisCollateral();
-        }
-
-        // call spread can be collateralized by underlying or strike
-        if (optionType == TokenType.CALL_SPREAD && collateralId != underlyingId && collateralId != strikeId) {
-            revert FM_CannotMintOptionWithThisCollateral();
-        }
-
-        // put or put spread can only be collateralized by strike
-        if ((optionType == TokenType.PUT_SPREAD || optionType == TokenType.PUT) && strikeId != collateralId) {
-            revert FM_CannotMintOptionWithThisCollateral();
-        }
-    }
 
     /**
      * @notice calculate minimum collateral

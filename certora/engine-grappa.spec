@@ -2,6 +2,7 @@ import "base.spec";
 import "account-state.spec";
 
 using GrappaExtended as grappa;
+using FullMarginEngineExtended as engine;
 
 methods {
   // calling grappa.assets should not change over time
@@ -11,7 +12,7 @@ methods {
 
   function grappa.checkIsValidTokenIdToMint(uint256) external;
 
-  function checkTokenIdToMint(uint256) external envfree;
+  function engine.checkTokenIdToMint(uint256) external envfree;
 }
 
 
@@ -28,9 +29,6 @@ function accountWellCollateralized(address acc) returns bool {
 }
 
 
-// // if an account is well collateralized, it must be well collateralized after any execution
-// invariant account_well_collateralized(env e, address acc) accountWellCollateralized(acc);
-    
 /* ======================================= *
  *                 Rules
  * ======================================= */
@@ -49,14 +47,13 @@ rule accountAlwaysSolvent(address acc) {
 
     tokenId, shortAmount, collatId, collatAmount = marginAccounts(acc);
     
-    checkTokenIdToMint(tokenId);
+    // ensure that the tokenId in the account storage is valid
+    engine.checkTokenIdToMint(tokenId);
     grappa.checkIsValidTokenIdToMint(e, tokenId);
     require !lastReverted;
 
-    collateral, _ = grappa.assets(collatId);
-
+    // query grappa at settlement, with amount of token this account minted
     _, _, payout = grappa.getPayout(e, tokenId, shortAmount);
-
 
     assert collatAmount >= payout;
  }
