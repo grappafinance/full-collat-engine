@@ -1,6 +1,6 @@
-certoraRun src/FullMarginEngine.sol:FullMarginEngine lib/core-cash/src/core/Grappa.sol lib/core-cash/src/core/CashOptionToken.sol \
+certoraRun src/FullMarginEngine.sol:FullMarginEngine certora/harness/GrappaExtended.sol \
     --verify FullMarginEngine:certora/engine-grappa.spec \
-    --link FullMarginEngine:grappa=Grappa FullMarginEngine:optionToken=CashOptionToken CashOptionToken:grappa=Grappa \
+    --link FullMarginEngine:grappa=GrappaExtended \
     --solc_allow_path src \
     --optimistic_loop \
     --packages  solmate=lib/solmate/src \
