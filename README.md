@@ -63,6 +63,4 @@ slither src
 
 ### Run Certora verification
 
-```sh
-./certora/runEngine.sh
-```
+Go to [`certora/`](./certora/) for more detailed information.
