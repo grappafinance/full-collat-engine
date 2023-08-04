@@ -6,7 +6,7 @@ import "grappa-core/libraries/TokenIdUtil.sol";
 import "grappa-core/libraries/ProductIdUtil.sol";
 
 // Full margin types
-import "./types.sol";
+import {FullMarginAccount, FullMarginDetail} from "./types.sol";
 import "./errors.sol";
 
 /**
@@ -33,6 +33,10 @@ library FullMarginLib {
      * @param account FullMarginAccount storage that will be updated
      */
     function addCollateral(FullMarginAccount storage account, uint8 collateralId, uint80 amount) internal {
+        // this line should not be allowed to executed because collateralId == 0 will invoke
+        // calling safeTransferFrom on address(0). But still guarding here to be safe
+        if (collateralId == 0) revert FM_WrongCollateralId();
+
         uint80 cacheId = account.collateralId;
         if (cacheId == 0) {
             account.collateralId = collateralId;
@@ -51,7 +55,10 @@ library FullMarginLib {
 
         uint80 newAmount = account.collateralAmount - amount;
         account.collateralAmount = newAmount;
-        if (newAmount == 0) {
+
+        // only reset the collateralId if the collateral amount is 0 and there is no short position
+        // if tokenId is non-empty, we keep collatId here so mismatched collateral cannot be added
+        if (newAmount == 0 && account.tokenId == 0) {
             account.collateralId = 0;
         }
     }
@@ -65,21 +72,7 @@ library FullMarginLib {
 
         // assign collateralId or check collateral id is the same
         (,, uint8 underlyingId, uint8 strikeId, uint8 collateralId) = productId.parseProductId();
-
-        // call can only be collateralized by underlying
-        if ((optionType == TokenType.CALL) && underlyingId != collateralId) {
-            revert FM_CannotMintOptionWithThisCollateral();
-        }
-
-        // call spread can be collateralized by underlying or strike
-        if (optionType == TokenType.CALL_SPREAD && collateralId != underlyingId && collateralId != strikeId) {
-            revert FM_CannotMintOptionWithThisCollateral();
-        }
-
-        // put or put spread can only be collateralized by strike
-        if ((optionType == TokenType.PUT_SPREAD || optionType == TokenType.PUT) && strikeId != collateralId) {
-            revert FM_CannotMintOptionWithThisCollateral();
-        }
+        checkProductToMint(optionType, underlyingId, strikeId, collateralId);
 
         uint80 cacheCollatId = account.collateralId;
         if (cacheCollatId == 0) {
@@ -161,5 +154,25 @@ library FullMarginLib {
         // unlikely the payout is the exact amount in the account
         // if that is the case (collateralAmount = 0), use can use removeCollateral(0)
         // to reset the collateral id
+    }
+
+    /**
+     * @notice revert if the tokenId is not valid to be minted by this engine
+     */
+    function checkProductToMint(TokenType optionType, uint8 underlyingId, uint8 strikeId, uint8 collateralId) internal view {
+        // call can only be collateralized by underlying
+        if ((optionType == TokenType.CALL) && underlyingId != collateralId) {
+            revert FM_CannotMintOptionWithThisCollateral();
+        }
+
+        // call spread can be collateralized by underlying or strike
+        if (optionType == TokenType.CALL_SPREAD && collateralId != underlyingId && collateralId != strikeId) {
+            revert FM_CannotMintOptionWithThisCollateral();
+        }
+
+        // put or put spread can only be collateralized by strike
+        if ((optionType == TokenType.PUT_SPREAD || optionType == TokenType.PUT) && strikeId != collateralId) {
+            revert FM_CannotMintOptionWithThisCollateral();
+        }
     }
 }

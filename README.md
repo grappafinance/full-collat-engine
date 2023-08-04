@@ -43,20 +43,24 @@ yarn
 npx husky install
 ```
 
-### Test locally
+### Test, Coverage and Lint
 
 ```shell
 forge test
-```
 
-### Run Coverage
-
-```shell
 forge coverage
-```
 
-### Linting
-
-```shell
 forge fmt
 ```
+
+## Security
+
+### Run Slither static analysis
+
+```shell
+slither src
+```
+
+### Run Certora verification
+
+Go to [`certora/`](./certora/) for more detailed information.

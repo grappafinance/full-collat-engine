@@ -7,3 +7,4 @@ lcov.info
 .DS_Store
 .env
 bin/
+.certora_internal

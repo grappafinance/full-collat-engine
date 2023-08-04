@@ -11,6 +11,10 @@ import "grappa-core/config/errors.sol";
 
 import "src/errors.sol";
 
+import "forge-std/console2.sol";
+
+import {TokenIdUtil} from "grappa-core/libraries/TokenIdUtil.sol";
+
 contract FullMarginEngineGeneralTest is FullMarginFixture {
     function setUp() public override {
         FullMarginFixture.setUp();

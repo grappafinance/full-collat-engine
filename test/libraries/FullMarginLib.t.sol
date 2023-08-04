@@ -79,7 +79,7 @@ contract FullMarginLibTest is Test {
         FullMarginAccount memory acc = tester.account();
         assertEq(acc.collateralId, collatId);
 
-        // can add the same collaterl id again
+        // can add the same collateral id again
         tester.addCollateral(collatId, 100);
         acc = tester.account();
         assertEq(acc.collateralId, collatId);
@@ -90,13 +90,9 @@ contract FullMarginLibTest is Test {
         tester.addCollateral(collatId + 1, 100);
     }
 
-    function test_AddZeroId() public {
-        // the storage library won't revert if 0 is specified
-        // Engine contract needs to make sure collateral id cannot be 0
+    function test_RevertWhen_AddZeroId() public {
+        vm.expectRevert(FM_WrongCollateralId.selector);
         tester.addCollateral(0, 100);
-        FullMarginAccount memory acc = tester.account();
-        assertEq(acc.collateralId, 0);
-        assertEq(acc.collateralAmount, 100);
     }
 
     function test_ReduceCollateral() public {
@@ -268,10 +264,15 @@ contract FullMarginLibTest is Test {
 
     function test_Settle() public {
         // mint the option
-        uint256 tokenId = 77777;
+        uint64 expiry = uint64(block.timestamp) + 100;
+        uint8 strikeId = 1;
+        uint8 underlyingId = 2;
+        uint8 collateralId = 2;
+        uint40 productId = ProductIdUtil.getProductId(0, 0, underlyingId, strikeId, collateralId);
+        uint256 tokenId = TokenIdUtil.getTokenId(TokenType.CALL, productId, expiry, 100, 0);
+
         tester.mintOption(tokenId, 100);
-        uint8 collatId = 1;
-        tester.addCollateral(collatId, 1000);
+        tester.addCollateral(collateralId, 1000);
 
         // settlement will clear all short position
         tester.settleAtExpiry(500);
@@ -284,6 +285,6 @@ contract FullMarginLibTest is Test {
         tester.settleAtExpiry(500);
         acc = tester.account();
         assertEq(acc.collateralAmount, 0);
-        assertEq(acc.collateralId, collatId); // unchanged
+        assertEq(acc.collateralId, collateralId); // unchanged
     }
 }
