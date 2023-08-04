@@ -1,4 +1,4 @@
-certoraRun certora/harness/FullMarginEngineExtended.sol:FullMarginEngineExtended certora/harness/GrappaExtended.sol \
+certoraRun certora/harness/FullMarginEngineExtended.sol certora/harness/GrappaExtended.sol \
     --verify FullMarginEngineExtended:certora/engine-grappa.spec \
     --link FullMarginEngineExtended:grappa=GrappaExtended \
     --solc_allow_path src \

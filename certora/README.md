@@ -7,6 +7,8 @@ The spec is split up in different files to make sure we can efficiently run all 
 
 **Running the script**
 
+Make sure `solc` is a installed command on your terminal, with `solc --version` equals 0.8.18.
+
 ```sh
 ./certora/verify-account-state.sh
 
