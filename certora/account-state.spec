@@ -38,32 +38,16 @@ function collateralIdFromTokenMatch(address acc) returns bool {
  * ======================================= */
 
 /// if shorted amount is non 0, then short id MUST NOT be 0
-invariant account_no_unknown_debt(env e, address acc) noShortAmountWithoutShortId(acc) {
-
-    // while evaluating method transferAccount, assume that the {from} account already satisfy this rule!
-    preserved transferAccount(address from, address to) with (env e2) {
-        require noShortAmountWithoutShortId(from);
-    }
-}
+invariant account_no_unknown_debt(env e, address acc) noShortAmountWithoutShortId(acc);
 
 /// if shorted token id is 0 (no short), then short amount MUST be 0. Vice versa.
-invariant account_no_unknown_collateral(env e, address acc) noCollatAmountWithoutCollatId(acc) {
-    // todo: reserach better method than reverting collatId == 0 in code.
+// todo: reserach better method than reverting collatId == 0 in code.
+invariant account_no_unknown_collateral(env e, address acc) noCollatAmountWithoutCollatId(acc);
 
-    // while evaluating method transferAccount, assume that the {from} account already satisfy this rule!
-    preserved transferAccount(address from, address to) with (env e2) {
-        require noCollatAmountWithoutCollatId(from);
-    }
-}
 
 // if an account has collat Id and short token id, collateral id derived from tokenId must equal collatId
 invariant account_collateral_match(env e, address acc) collateralIdFromTokenMatch(acc) {
 
-    // while evaluating method transferAccount, assume that the {from} account already satisfy this rule!
-    preserved transferAccount(address from, address to) with (env e2) {
-        require collateralIdFromTokenMatch(from);
-    }
-    
     // make sure we starting with empty account, no bad shortId can exist
     // todo: use grappa.checkTokenId instead of this assumption?
     preserved { 

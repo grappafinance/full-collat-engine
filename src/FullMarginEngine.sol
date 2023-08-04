@@ -111,21 +111,6 @@ contract FullMarginEngine is DebitSpread, IMarginEngine, ReentrancyGuard {
     }
 
     /**
-     * @notice transfer an account to someone else
-     * @dev expected to be call by account owner
-     * @param _subAccount the id of subaccount to transfer
-     * @param _newSubAccount the id of receiving account
-     */
-    function transferAccount(address _subAccount, address _newSubAccount) external {
-        if (!_isPrimaryAccountFor(msg.sender, _subAccount)) revert FM_NoAccess();
-
-        if (!marginAccounts[_newSubAccount].isEmpty()) revert FM_AccountIsNotEmpty();
-        marginAccounts[_newSubAccount] = marginAccounts[_subAccount];
-
-        delete marginAccounts[_subAccount];
-    }
-
-    /**
      * ========================================================= *
      *      Override Sate changing functions in BaseMargin       *
      * ========================================================= *
