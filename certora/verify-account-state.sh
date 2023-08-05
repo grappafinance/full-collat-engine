@@ -1,4 +1,4 @@
-certoraRun src/FullMarginEngine.sol:FullMarginEngine \
+certoraRun src/FullMarginEngine.sol \
     --verify FullMarginEngine:certora/account-state.spec \
     --solc_allow_path src \
     --optimistic_loop \

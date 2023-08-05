@@ -32,9 +32,6 @@ error FM_SplitAmountMisMatch();
 /// @dev Trying to collateralized the position with different collateral than specified in productId
 error FM_CollateralMisMatch();
 
-/// @dev Cannot override a non-empty subaccount id
-error FM_AccountIsNotEmpty();
-
 /// @dev Cannot remove collateral because there are expired longs
 error FM_ExpiredShortInAccount();
 
