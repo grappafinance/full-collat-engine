@@ -281,10 +281,10 @@ contract FullMarginLibTest is Test {
         assertEq(acc.shortAmount, 0);
         assertEq(acc.collateralAmount, 500);
 
-        // will not reset collateral id if ending amount is 0!
+        // will reset collateral id if ending amount is 0!
         tester.settleAtExpiry(500);
         acc = tester.account();
         assertEq(acc.collateralAmount, 0);
-        assertEq(acc.collateralId, collateralId); // unchanged
+        assertEq(acc.collateralId, 0);
     }
 }
