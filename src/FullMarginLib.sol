@@ -148,18 +148,15 @@ library FullMarginLib {
 
         // this line should not underflow because collateral should always be enough
         // but keeping the underflow check to make sure
-        account.collateralAmount = (collateral - payout).toUint256().toUint80();
-
-        // do not check ending collateral amount (and reset collateral id) because it is very
-        // unlikely the payout is the exact amount in the account
-        // if that is the case (collateralAmount = 0), use can use removeCollateral(0)
-        // to reset the collateral id
+        uint80 newCollateral = (collateral - payout).toUint256().toUint80();
+        account.collateralAmount = newCollateral;
+        if (newCollateral == 0) account.collateralId = 0;
     }
 
     /**
      * @notice revert if the tokenId is not valid to be minted by this engine
      */
-    function checkProductToMint(TokenType optionType, uint8 underlyingId, uint8 strikeId, uint8 collateralId) internal view {
+    function checkProductToMint(TokenType optionType, uint8 underlyingId, uint8 strikeId, uint8 collateralId) internal pure {
         // call can only be collateralized by underlying
         if ((optionType == TokenType.CALL) && underlyingId != collateralId) {
             revert FM_CannotMintOptionWithThisCollateral();
