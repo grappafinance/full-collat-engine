@@ -1,8 +1,8 @@
 import "base.spec";
 import "account-state.spec";
 
-using GrappaExtended as grappa;
-using FullMarginEngineExtended as engine;
+using GrappaHarness as grappa;
+using FullMarginEngineHarness as engine;
 
 methods {
   // calling grappa.assets should not change over time
@@ -10,7 +10,7 @@ methods {
 
   function grappa.getPayout(uint256,uint64) external returns (address,address,uint256);
 
-  function grappa.checkIsValidTokenIdToMint(uint256) external;
+  function grappa.checkIsValidTokenIdToMint(uint256) external envfree;
 
   function engine.checkTokenIdToMint(uint256) external envfree;
 }
@@ -42,11 +42,11 @@ rule accountAlwaysSolvent(address acc) {
 
     require accountWellCollateralized(acc);
     require collateralIdFromTokenMatch(acc);
-    
+
     uint256 tokenId; uint64 shortAmount; uint256 collatAmount; address collateral; uint256 payout; uint8 collatId;
 
     tokenId, shortAmount, collatId, collatAmount = marginAccounts(acc);
-    
+
     // ensure that the tokenId in the account storage is valid
     engine.checkTokenIdToMint(tokenId);
     grappa.checkIsValidTokenIdToMint(e, tokenId);
@@ -56,4 +56,4 @@ rule accountAlwaysSolvent(address acc) {
     _, _, payout = grappa.getPayout(e, tokenId, shortAmount);
 
     assert collatAmount >= payout;
- }
+}

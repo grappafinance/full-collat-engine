@@ -4,7 +4,7 @@ pragma solidity ^0.8.0;
 
 import {Grappa} from "grappa-core/core/Grappa.sol";
 
-contract GrappaExtended is Grappa {
+contract GrappaHarness is Grappa {
   constructor(address _optionToken) Grappa (_optionToken) {}
 
   function checkIsValidTokenIdToMint(uint256 tokenId) external view {

@@ -9,10 +9,10 @@ import {ProductIdUtil} from "grappa-core/libraries/ProductIdUtil.sol";
 import {TokenType} from  "grappa-core/config/enums.sol";
 
 /**
- * @title FullMarginEngineExtended
+ * @title FullMarginEngineHarness
  * @dev expose more functions for certora formal verification
  */
-contract FullMarginEngineExtended is FullMarginEngine {
+contract FullMarginEngineHarness is FullMarginEngine {
   constructor(address _grappa, address _optionToken) FullMarginEngine(_grappa, _optionToken) {}
 
   function checkTokenIdToMint(uint256 tokenId) external view {
