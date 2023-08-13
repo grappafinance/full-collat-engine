@@ -54,3 +54,5 @@ invariant account_collateral_match(env e, address acc) collateralIdFromTokenMatc
       require(accountIsEmpty(acc));
     }
 }
+
+invariant account_has_enough_collateral(env e, address acc) accountWellCollateralized(acc);

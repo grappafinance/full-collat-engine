@@ -14,6 +14,9 @@ error FM_UnsupportedAction();
 ///      Put spread can only be collateralized by strike (USDC)
 error FM_CannotMintOptionWithThisCollateral();
 
+/// @dev Cannot mint option token with underlying == strike
+error FM_UnderlyingStrikeIdentical();
+
 /// @dev Collateral id is wrong: the id doesn't match the existing collateral
 error FM_WrongCollateralId();
 

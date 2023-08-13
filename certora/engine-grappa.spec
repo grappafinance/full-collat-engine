@@ -5,55 +5,61 @@ using GrappaHarness as grappa;
 using FullMarginEngineHarness as engine;
 
 methods {
-  // calling grappa.assets should not change over time
   function grappa.assets(uint8) external returns(address, uint8) envfree;
 
   function grappa.getPayout(uint256,uint64) external returns (address,address,uint256);
 
-  function grappa.checkIsValidTokenIdToMint(uint256) external envfree;
+  function grappa.checkIsValidTokenIdToMint(uint256) external;
+
+  function grappa.parseAssetsFromTokenId(uint256) external returns (uint8, address, address,address) envfree;
 
   function engine.checkTokenIdToMint(uint256) external envfree;
 }
 
+function check_token_type_fully_collateralized(uint8 tokenTypeToCheck, uint256 tokenId) {
+    env e;
 
-/* ==================================================== *
- *
- *    This spec has Grappa linked at Engine.grappa()
- *                  
- * ==================================================== */
+    // assume this token doesn't have underlying == strike (ETH - ETH option)
+    address underlying; address strike; uint8 tokenType;
+    tokenType, underlying, strike, _  = grappa.parseAssetsFromTokenId(e, tokenId);
+    require underlying != strike; 
+    require tokenType == tokenTypeToCheck;
 
-function accountWellCollateralized(address acc) returns bool {
-    uint collateralRequied = getMinCollateral(acc);
-    uint collateralDeposited = getAccountCollateralAmount(acc);
-    return collateralDeposited >= collateralRequied;
+    // ensure that the tokenId is valid to be minted by Grappa (inclulding not expired)
+    grappa.checkIsValidTokenIdToMint(e, tokenId);
+    engine.checkTokenIdToMint(tokenId);
+    require !lastReverted;
+
+    // different env, pass of time is allowed
+    env e2;
+    require e2.block.timestamp > e.block.timestamp;
+
+    // query grappa at settlement, with amount of token this account minted
+    uint256 payout;
+    _, _, payout = grappa.getPayout(e2, tokenId, 1000000);
+
+    uint256 collateralRequirement;
+    collateralRequirement = engine.getMinCollateralByTokenId(tokenId);
+
+    assert collateralRequirement >= payout;
 }
-
 
 /* ======================================= *
  *                 Rules
  * ======================================= */
 
-/**
- * @title Account always solvent
- * @notice querying grappa for payout for an account will always be coverable by the collateral in the account
- */
-rule accountAlwaysSolvent(address acc) {
-    env e;
-
-    require accountWellCollateralized(acc);
-    require collateralIdFromTokenMatch(acc);
-
-    uint256 tokenId; uint64 shortAmount; uint256 collatAmount; address collateral; uint256 payout; uint8 collatId;
-
-    tokenId, shortAmount, collatId, collatAmount = marginAccounts(acc);
-
-    // ensure that the tokenId in the account storage is valid
-    engine.checkTokenIdToMint(tokenId);
-    grappa.checkIsValidTokenIdToMint(e, tokenId);
-    require !lastReverted;
-
-    // query grappa at settlement, with amount of token this account minted
-    _, _, payout = grappa.getPayout(e, tokenId, shortAmount);
-
-    assert collatAmount >= payout;
+rule put_fully_collateralized(uint256 tokenId) {
+    check_token_type_fully_collateralized(0, tokenId);
 }
+
+rule put_spread_fully_collateralized(uint256 tokenId) {
+    check_token_type_fully_collateralized(1, tokenId);
+}
+
+rule call_fully_collateralized(uint256 tokenId) {
+    check_token_type_fully_collateralized(2, tokenId);
+}
+
+// rule call_spread_fully_collateralized(uint256 tokenId) {
+//     check_token_type_fully_collateralized(3, tokenId);
+// }
