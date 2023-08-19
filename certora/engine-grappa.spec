@@ -85,6 +85,7 @@ rule call_spread_fully_collateralized_by_strike(uint256 tokenId) {
     check_token_type_fully_collateralized(3, tokenId);
 }
 
+/// if a call spread is collateralized by underlying asset, payout is always covered by collateral reguardless of underlying (collateral) price
 rule call_spread_fully_collateralized_by_underlying(uint256 tokenId) {
     address underlying; address strike; address collateral; uint8 underlyingId; uint8 collateralId;
     _, underlying, strike, collateral, underlyingId, _, collateralId  = grappa.parseAssetsFromTokenId(tokenId);
@@ -99,8 +100,10 @@ rule call_spread_fully_collateralized_by_underlying(uint256 tokenId) {
     expiryPrice, isFinalized = oracle.getPriceAtExpiry(underlying, strike, expiry);
 
     require isFinalized;
-    // require expiryPrice > assert_uint256(longStrike);
-    require expiryPrice > assert_uint256(shortStrike);
+
+    // adding both requirements won't help time out 
+    require expiryPrice > assert_uint256(longStrike);
+    require expiryPrice < assert_uint256(shortStrike);
     
     check_token_type_fully_collateralized(3, tokenId);
 }

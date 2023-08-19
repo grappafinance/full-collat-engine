@@ -1,5 +1,5 @@
-certoraRun src/FullMarginEngine.sol \
-    --verify FullMarginEngine:certora/account-state.spec \
+certoraRun certora/harness/FullMarginEngineHarness.sol \
+    --verify FullMarginEngineHarness:certora/account-state.spec \
     --solc_allow_path src \
     --optimistic_loop \
     --packages  solmate=lib/solmate/src \
