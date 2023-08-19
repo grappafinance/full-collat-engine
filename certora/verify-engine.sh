@@ -1,4 +1,4 @@
-certoraRun certora/harness/FullMarginEngineHarness.sol certora/harness/GrappaHarness.sol \
+certoraRun certora/harness/FullMarginEngineHarness.sol certora/harness/GrappaHarness.sol test/mocks/MockOracle.sol \
     --verify FullMarginEngineHarness:certora/engine-grappa.spec \
     --link FullMarginEngineHarness:grappa=GrappaHarness \
     --solc_allow_path src \

@@ -33,14 +33,14 @@ contract FullMarginEngineHarness is FullMarginEngine {
 
     (, uint8 collateralDecimals) = grappa.assets(collateralId);
     FullMarginDetail memory detail = FullMarginDetail({
-            shortAmount: 1000000, // 1 unit
-            longStrike: secondaryStrike,
-            shortStrike: primaryStrike,
-            collateralAmount: 0,
-            collateralDecimals: collateralDecimals,
-            collateralizedWithStrike: collateralizedWithStrike,
-            tokenType: tokenType
-        });
+        shortAmount: 1000000, // 1 unit
+        longStrike: secondaryStrike,
+        shortStrike: primaryStrike,
+        collateralAmount: 0,
+        collateralDecimals: collateralDecimals,
+        collateralizedWithStrike: collateralizedWithStrike,
+        tokenType: tokenType
+    });
     return FullMarginMath.getCollateralRequirement(detail);
   }
 }
