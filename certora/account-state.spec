@@ -41,7 +41,6 @@ function collateralIdFromTokenMatch(address acc) returns bool {
 invariant account_no_unknown_debt(env e, address acc) noShortAmountWithoutShortId(acc);
 
 /// if shorted token id is 0 (no short), then short amount MUST be 0. Vice versa.
-// todo: reserach better method than reverting collatId == 0 in code.
 invariant account_no_unknown_collateral(env e, address acc) noCollatAmountWithoutCollatId(acc);
 
 

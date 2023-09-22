@@ -17,8 +17,8 @@ import {TokenIdUtil} from "grappa-core/libraries/TokenIdUtil.sol";
 import {ProductIdUtil} from "grappa-core/libraries/ProductIdUtil.sol";
 
 // Constants and types from Grappa core
-import "grappa-core/config/types.sol";
-import "grappa-core/config/enums.sol";
+import {ActionArgs} from "grappa-core/config/types.sol";
+import {TokenType, ActionType} from "grappa-core/config/enums.sol";
 import "grappa-core/config/errors.sol";
 
 // Full Margin library for FullMarginAccount struct

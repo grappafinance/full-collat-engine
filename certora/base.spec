@@ -2,7 +2,7 @@
  *              Declarations
  * ======================================= */
 methods {
-  function getMinCollateral(address) external returns(uint) envfree; 
+  function getMinCollateral(address) external returns(uint256) envfree; 
 
   function marginAccounts(address) external returns(uint256, uint64, uint8, uint80) envfree;
 
@@ -14,7 +14,10 @@ methods {
 
   function optionToken() external returns (address) envfree;
 
-  function allowedExecutionLeft(uint160,address) external returns (uint) envfree;
+  function allowedExecutionLeft(uint160,address) external returns (uint256) envfree;
+
+  // functions defined in Hardness
+  function getMinCollateralByTokenId(uint256) external returns (uint256) envfree;
 }
 
 /* ======================================= *
@@ -54,4 +57,10 @@ function accountIsEmpty(address acc) returns bool {
     uint256 shortId; uint64 shortAmount; uint256 collatId; uint80 collatAmount;
     shortId, shortAmount, collatId, collatAmount = marginAccounts(acc);
     return shortAmount == 0 && collatAmount == 0 && shortId == 0 && collatId == 0;
+}
+
+function accountWellCollateralized(address acc) returns bool {
+    uint collateralRequied = getMinCollateral(acc);
+    uint collateralDeposited = getAccountCollateralAmount(acc);
+    return collateralDeposited >= collateralRequied;
 }

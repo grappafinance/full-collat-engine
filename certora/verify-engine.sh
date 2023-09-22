@@ -1,6 +1,6 @@
-certoraRun certora/harness/FullMarginEngineExtended.sol certora/harness/GrappaExtended.sol \
-    --verify FullMarginEngineExtended:certora/engine-grappa.spec \
-    --link FullMarginEngineExtended:grappa=GrappaExtended \
+certoraRun certora/harness/FullMarginEngineHarness.sol certora/harness/GrappaHarness.sol test/mocks/MockOracle.sol \
+    --verify FullMarginEngineHarness:certora/engine-grappa.spec \
+    --link FullMarginEngineHarness:grappa=GrappaHarness \
     --solc_allow_path src \
     --optimistic_loop \
     --packages  solmate=lib/solmate/src \
