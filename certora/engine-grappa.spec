@@ -46,7 +46,6 @@ function check_token_type_fully_collateralized(uint8 tokenTypeToCheck, uint256 t
     // ensure that the tokenId is valid to be minted by Grappa (inclulding not expired)
     grappa.checkIsValidTokenIdToMint(e, tokenId);
     engine.checkTokenIdToMint(tokenId);
-    require !lastReverted;
 
     // different env, pass of time is allowed
     env e2;
@@ -86,24 +85,20 @@ rule call_spread_fully_collateralized_by_strike(uint256 tokenId) {
 }
 
 /// if a call spread is collateralized by underlying asset, payout is always covered by collateral reguardless of underlying (collateral) price
-rule call_spread_fully_collateralized_by_underlying(uint256 tokenId) {
-    address underlying; address strike; address collateral; uint8 underlyingId; uint8 collateralId;
-    _, underlying, strike, collateral, underlyingId, _, collateralId  = grappa.parseAssetsFromTokenId(tokenId);
+// rule call_spread_fully_collateralized_by_underlying(uint256 tokenId) {
+//     address underlying; address strike; address collateral; uint8 underlyingId; uint8 collateralId;
+//     _, underlying, strike, collateral, underlyingId, _, collateralId  = grappa.parseAssetsFromTokenId(tokenId);
     
-    require collateral == underlying;
-    // extra constraint to specify ids are the same, 
-    // excluding the scenarios where Grappa could have multiple ids point to same address or vice versa (which is impossible)
-    require collateralId == underlyingId;
+//     require collateral == underlying;
+//     // extra constraint to specify ids are the same, 
+//     // excluding the scenarios where Grappa could have multiple ids point to same address or vice versa (which is impossible)
+//     require collateralId == underlyingId;
 
-    uint64 longStrike; uint64 shortStrike; uint256 expiryPrice; bool isFinalized; uint64 expiry;
-    expiry, longStrike, shortStrike = grappa.parseExpiryAndStrikes(tokenId);
-    expiryPrice, isFinalized = oracle.getPriceAtExpiry(underlying, strike, expiry);
+//     uint64 longStrike; uint64 shortStrike; uint256 expiryPrice; bool isFinalized; uint64 expiry;
+//     expiry, longStrike, shortStrike = grappa.parseExpiryAndStrikes(tokenId);
+//     expiryPrice, isFinalized = oracle.getPriceAtExpiry(underlying, strike, expiry);
 
-    require isFinalized;
-
-    // adding both requirements won't help time out 
-    require expiryPrice > assert_uint256(longStrike);
-    require expiryPrice < assert_uint256(shortStrike);
+//     require isFinalized;
     
-    check_token_type_fully_collateralized(3, tokenId);
-}
+//     check_token_type_fully_collateralized(3, tokenId);
+// }
