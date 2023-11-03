@@ -18,8 +18,13 @@
 
 ## Introduction
 
-This is the repository contains the full collateral margin engine for Grappa core protocol. This module is capable of minting the following tokens:
+This is the repository contains the full collateral margin engine for Grappa core protocol. This engine is 
+* **Permisionless**: There are no privileged roles, administrators, or any predefined parameters.
+* **Oracle Agnostic**: Can work with any registered oracle of your choice in **Grappa**.
+* **No liquidation risk**: The engine is always fully collateralized, and it can never go insolvent. (except when it is exploited) 
 
+### Supported instruments 
+This engine is capable of minting the following tokens:
 * Call option (collateralized with underlying asset)
 * Put option (collateralized with strike asset)
 * Call spread (collateralized with underlying or strike)
